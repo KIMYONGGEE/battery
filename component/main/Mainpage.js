@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, FlatList, Image} from 'react-native';
 
 import BatteryInfo from './sections/BatteryInfo';
 
@@ -162,7 +162,7 @@ function Mainpage() {
     
     <SafeAreaView style={styles.wrap}>
       <View style={styles.Header}>
-        <Text style={styles.HeaderTitle}>NEO_SEMITECH</Text>
+      <Text style={styles.HeaderTitle}>NEO SEMITECH</Text>
       </View>
 
     <FlatList style={styles.scroll}
@@ -177,14 +177,14 @@ function Mainpage() {
 
 const styles = StyleSheet.create({
   Header: {
-    height: "8%",
+    height: "10%",
     backgroundColor: '#ff6600',
     justifyContent: 'space-between',
   },
   HeaderTitle: {
     color: '#000000',
     fontSize : 20,
-    margin: 25,
+    margin: 40,
     fontWeight : "bold",
   },
   scroll:{
