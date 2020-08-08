@@ -1,21 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
+
+import Mainpage from './component/main/Mainpage'
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>준수횽 바봉 용기 멍충이 이완석 똥개</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+    <Mainpage/>
+    </> 
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
