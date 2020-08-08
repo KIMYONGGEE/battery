@@ -158,10 +158,11 @@ function Mainpage() {
   
   return (
     <>
-    <StatusBar backgroundColor={'#214288'} barStyle="light-content"/> 
+    <StatusBar backgroundColor={'#ff6600'} barStyle="light-content"/> 
+    
     <SafeAreaView style={styles.wrap}>
       <View style={styles.Header}>
-        <Text style={styles.HeaderTitle}>NEO-SEMITECH</Text>
+        <Text style={styles.HeaderTitle}>NEO_SEMITECH</Text>
       </View>
 
     <FlatList style={styles.scroll}
@@ -177,17 +178,18 @@ function Mainpage() {
 const styles = StyleSheet.create({
   Header: {
     height: "8%",
-    backgroundColor: '#214288',
+    backgroundColor: '#ff6600',
     justifyContent: 'space-between',
   },
   HeaderTitle: {
-    color: '#FFFFFF',
-    fontSize : 25,
-    margin: 25
+    color: '#000000',
+    fontSize : 20,
+    margin: 25,
+    fontWeight : "bold",
   },
   scroll:{
     height: "100%",
-    backgroundColor: '#ccd5eb',
+    backgroundColor: '#FFFFFF',
   },
 });
 
