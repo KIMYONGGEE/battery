@@ -3,7 +3,7 @@ import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import ListPage from './component/main/Mainpage';
+import ListPage from './component/list/ListPage';
 import DetailPage from './component/detail/DetailPage';
 
 const Stack = createStackNavigator();
