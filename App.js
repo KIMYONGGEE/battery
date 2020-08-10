@@ -12,7 +12,20 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="List">
-        <Stack.Screen name="List" component={ListPage} />
+        <Stack.Screen
+          name="List"
+          component={ListPage}
+          options={{
+            title: 'NEO SEMITECH',
+            headerStyle: {
+              backgroundColor: '#ff6600',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
         <Stack.Screen name="Detail" component={DetailPage} />
       </Stack.Navigator>
     </NavigationContainer>

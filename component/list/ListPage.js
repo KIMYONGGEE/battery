@@ -163,11 +163,6 @@ function Mainpage({ navigation }) {
     <StatusBar backgroundColor={'#ff6600'} barStyle="light-content"/> 
     
     <SafeAreaView style={styles.wrap}>
-      {/*
-      <View style={styles.Header}>
-      <Text style={styles.HeaderTitle}>NEO SEMITECH</Text>
-      </View>
-      */}
     <FlatList style={styles.scroll}
         keyExtractor={item => item.id.toString()}
         data={state.Data}

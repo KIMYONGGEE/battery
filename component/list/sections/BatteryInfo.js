@@ -9,12 +9,10 @@ function BatteryInfo({Battery, navigation}){
         {
           return (
             <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-            <View style={styles.container}>
-              <Text
-                style={styles.text}
-              >
+            <View style={styles.ListView}>
+              <Text style={styles.ListText}>
                 <ChargingBar Battery={Battery} />
-                {'     '}{'000'}{Battery.id}{'       '}{Battery.CycleCount}{'cycle'}
+                {'          '}{'000'}{Battery.id}{'          '}{Battery.CycleCount}{'cycle'}
               </Text>
             </View>
             </TouchableOpacity>
@@ -22,10 +20,10 @@ function BatteryInfo({Battery, navigation}){
         }else{
           return (
             <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-            <View style={styles.container}>
-              <Text style={styles.text}>
+            <View style={styles.ListView}>
+              <Text style={styles.ListText}>
                 <ChargingBar Battery={Battery} />
-                {'     '}{'000'}{Battery.id}{'     '}{Battery.CycleCount}{'cycle'}
+                {'          '}{'000'}{Battery.id}{'        '}{Battery.CycleCount}{'cycle'}
               </Text>
             </View>
             </TouchableOpacity>
@@ -37,10 +35,10 @@ function BatteryInfo({Battery, navigation}){
       {
         return (
           <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-          <View style={styles.container}>
-            <Text style={styles.text}>
+          <View style={styles.ListView}>
+            <Text style={styles.ListText}>
               <ChargingBar Battery={Battery} />
-              {'     '}{'00'}{Battery.id}{'       '}{Battery.CycleCount}{'cycle'}
+              {'          '}{'00'}{Battery.id}{'          '}{Battery.CycleCount}{'cycle'}
             </Text>
           </View>
           </TouchableOpacity>
@@ -48,10 +46,10 @@ function BatteryInfo({Battery, navigation}){
       }else{
         return (
           <TouchableOpacity onPress={() => navigation.navigate('Detail')}>
-          <View style={styles.container}>
-            <Text style={styles.text}>
+          <View style={styles.ListView}>
+            <Text style={styles.ListText}>
               <ChargingBar Battery={Battery} />
-              {'     '}{'00'}{Battery.id}{'     '}{Battery.CycleCount}{'cycle'}
+              {'          '}{'00'}{Battery.id}{'        '}{Battery.CycleCount}{'cycle'}
             </Text>
           </View>
           </TouchableOpacity>
@@ -61,11 +59,11 @@ function BatteryInfo({Battery, navigation}){
 }
 
 const styles = StyleSheet.create({
-  container: {
+  ListView: {
     marginTop:10,
     borderBottomWidth: 1,
   },
-  text: {
+  ListText: {
     textAlign: 'center',
     fontSize: 20,
     height: 70
