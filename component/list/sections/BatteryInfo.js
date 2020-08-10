@@ -3,15 +3,18 @@ import {StyleSheet, View, Text} from 'react-native';
 
 import ChargingBar from './ChargingBar';
 
-function BatteryInfo({Battery}){
+function BatteryInfo({Battery, navigation}){
     if(Battery.id < 10){
         if(Battery.CycleCount < 10)
         {
           return (
             <View style={styles.container}>
-              <Text style={styles.text}>
+              <Text
+                style={styles.text}
+                onPress={() => navigation.navigate('Detail')}
+              >
                 <ChargingBar Battery={Battery} />
-                {'     '}{'000'}{Battery.id}{'      '}{Battery.CycleCount}{'cycle'}
+                {'     '}{'000'}{Battery.id}{'       '}{Battery.CycleCount}{'cycle'}
               </Text>
             </View>
           );
@@ -33,7 +36,7 @@ function BatteryInfo({Battery}){
           <View style={styles.container}>
             <Text style={styles.text}>
               <ChargingBar Battery={Battery} />
-              {'     '}{'00'}{Battery.id}{'      '}{Battery.CycleCount}{'cycle'}
+              {'     '}{'00'}{Battery.id}{'       '}{Battery.CycleCount}{'cycle'}
             </Text>
           </View>
         );

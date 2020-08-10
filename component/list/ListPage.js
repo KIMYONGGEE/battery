@@ -1,10 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, FlatList, Image} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 
+//page
 import BatteryInfo from './sections/BatteryInfo';
 
-function Mainpage() {
+
+function Mainpage({ navigation }) {
   const defaultBattery = {
       Data: [
         {
@@ -161,14 +163,15 @@ function Mainpage() {
     <StatusBar backgroundColor={'#ff6600'} barStyle="light-content"/> 
     
     <SafeAreaView style={styles.wrap}>
+      {/*
       <View style={styles.Header}>
       <Text style={styles.HeaderTitle}>NEO SEMITECH</Text>
       </View>
-
+      */}
     <FlatList style={styles.scroll}
         keyExtractor={item => item.id.toString()}
         data={state.Data}
-        renderItem={({item}) => <BatteryInfo Battery={item} />}
+        renderItem={({item}) => <BatteryInfo Battery={item} navigation={navigation} />}
     />
     </SafeAreaView>
     </> 

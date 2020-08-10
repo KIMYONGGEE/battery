@@ -1,13 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView } from 'react-native';
+import React from 'react';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import Mainpage from './component/main/Mainpage'
+import ListPage from './component/main/Mainpage';
+import DetailPage from './component/detail/DetailPage';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <>
-    <Mainpage/>
-    </> 
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="List">
+        <Stack.Screen name="List" component={ListPage} />
+        <Stack.Screen name="Detail" component={DetailPage} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
