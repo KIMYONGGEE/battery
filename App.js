@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ListPage from './component/list/ListPage';
-import Datadescription from './component/detail/datadescription';
+import Datadescription from './component/detail/sections/datadescription';
 
 const Stack = createStackNavigator();
 
