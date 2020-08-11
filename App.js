@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ListPage from './component/list/ListPage';
-import DetailPage from './component/detail/DetailPage';
+import Datadescription from './component/detail/datadescription';
 
 const Stack = createStackNavigator();
 
@@ -26,7 +26,7 @@ export default function App() {
             },
           }}
         />
-        <Stack.Screen name="Detail" component={DetailPage} />
+        <Stack.Screen name="Detail" component={Datadescription} />
       </Stack.Navigator>
     </NavigationContainer>
   );
