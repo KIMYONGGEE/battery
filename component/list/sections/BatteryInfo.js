@@ -60,13 +60,12 @@ function BatteryInfo({Battery, navigation}){
 
 const styles = StyleSheet.create({
   ListView: {
-    marginTop:10,
     borderBottomWidth: 1,
   },
   ListText: {
     textAlign: 'center',
     fontSize: 20,
-    height: 70
+    height: 80
   },
 });
 
