@@ -45,7 +45,7 @@ function Datadescription() {
         <View style={styles.Navlist}>
           <Image
           style={styles.image}
-          source={require('../../assets/list.png')}
+          source={require('../../../assets/list.png')}
           />
         </View>
       </View>
