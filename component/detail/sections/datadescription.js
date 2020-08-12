@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Button, Alert, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity } from 'react-native';
 import Chart from './donut';
+import { NavigationContainer } from '@react-navigation/native';
 
-function Datadescription() {
+function Datadescription({navigation}) {
   return (
     <>
       <View style={styles.Top}></View>
@@ -42,12 +43,14 @@ function Datadescription() {
             onPress={()=>Alert.alert('click')}
           />
         </View>
+        <TouchableOpacity onPress={() => navigation.navigate('List')}>
         <View style={styles.Navlist}>
           <Image
           style={styles.image}
           source={require('../../../assets/list.png')}
           />
         </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.Navempty}></View>
     </>
