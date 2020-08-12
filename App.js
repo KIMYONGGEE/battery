@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ListPage from './component/list/ListPage';
-import Datadescription from './component/detail/sections/datadescription';
+import DetailPage from './component/detail/DetailPage';
 
 const Stack = createStackNavigator();
 
@@ -26,7 +26,21 @@ export default function App() {
             },
           }}
         />
-        <Stack.Screen name="Detail" component={Datadescription} />
+        <Stack.Screen
+          name="Detail"
+          component={DetailPage}
+          options={{
+            title: '세부사항',
+            headerStyle: {
+              backgroundColor: '#ff6600',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

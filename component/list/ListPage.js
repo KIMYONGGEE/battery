@@ -6,29 +6,29 @@ import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native';
 import BatteryInfo from './sections/BatteryInfo';
 
 
-function Mainpage({ navigation }) {
+function ListPage({ navigation }) {
   const defaultBattery = {
       Data: [
         {
             id:1,
             FillingAmount: 83,
-            charge: 0,
+            Charge: 0,
             Voltage:'19.5V',
             CycleCount: 5,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
           },
           {
             id:2,
-            charge: 0,
+            Charge: 0,
             FillingAmount: 23,
             Voltage:'20.5V',
             CycleCount: 10,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -36,11 +36,11 @@ function Mainpage({ navigation }) {
           {
             id:3,
             FillingAmount: 52,
-            charge: 0,
+            Charge: 0,
             Voltage:'16.5V',
             CycleCount: 3,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -48,11 +48,11 @@ function Mainpage({ navigation }) {
           {
             id:4,
             FillingAmount: 11,
-            charge: 0,
+            Charge: 0,
             Voltage:'16.5V',
             CycleCount: 7,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -60,11 +60,11 @@ function Mainpage({ navigation }) {
           {
             id:5,
             FillingAmount: 83,
-            charge: 1,
+            Charge: 1,
             Voltage:'20.5V',
             CycleCount: 5,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -72,23 +72,23 @@ function Mainpage({ navigation }) {
           {
             id:6,
             FillingAmount: 0,
-            charge: 0,
+            Charge: 0,
             Voltage:'16.5V',
             CycleCount: 2,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
           },
           {
             id:7,
-            FillingAmount: 83,
-            charge: 0,
+            FillingAmount: 100,
+            Charge: 0,
             Voltage:'16.5V',
             CycleCount: 8,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -96,11 +96,11 @@ function Mainpage({ navigation }) {
           {
             id:8,
             FillingAmount: 83,
-            charge: 1,
+            Charge: 1,
             Voltage:'20.5V',
             CycleCount: 5,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -108,11 +108,11 @@ function Mainpage({ navigation }) {
           {
             id:9,
             FillingAmount: 83,
-            charge: 0,
+            Charge: 0,
             Voltage:'16.5V',
             CycleCount: 5,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -120,11 +120,11 @@ function Mainpage({ navigation }) {
           {
             id:10,
             FillingAmount: 83,
-            charge: 0,
+            Charge: 0,
             Voltage:'16.5V',
             CycleCount: 2,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -132,11 +132,11 @@ function Mainpage({ navigation }) {
           {
             id:11,
             FillingAmount: 99,
-            charge: 0,
+            Charge: 0,
             Voltage:'20.5V',
             CycleCount: 6,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -144,11 +144,11 @@ function Mainpage({ navigation }) {
           {
             id:12,
             FillingAmount: 67,
-            charge: 0,
+            Charge: 0,
             Voltage:'16.5V',
             CycleCount: 7,
             TimeToFull: 0,
-            TImeToEmpty: 120,
+            TimeToEmpty: 120,
             Temp: 25,
             SOH: 100,
             Status: -1
@@ -191,4 +191,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Mainpage;
+export default ListPage;

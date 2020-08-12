@@ -1,18 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity } from 'react-native';
-import Chart from './donut';
-import { NavigationContainer } from '@react-navigation/native';
 
-function Datadescription({navigation}) {
+function Description({ navigation, Battery }) {
   return (
     <>
-      <View style={styles.Top}></View>
-
-      <View style={styles.Header}>
-        <Chart></Chart>
-      </View>
-
       <View style={styles.Data}>
         <View style={styles.Dataempty}></View>
         <View style={styles.Datadescription}>
@@ -25,13 +16,13 @@ function Datadescription({navigation}) {
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ STATUS</Text>
         </View>
         <View style={styles.Dataval}>
-          <Text style={{fontSize: 20}}>16.5V</Text>
-          <Text style={{fontSize: 20}}>5 count</Text>
-          <Text style={{fontSize: 20}}>0 min</Text>
-          <Text style={{fontSize: 20}}>120 min</Text>
-          <Text style={{fontSize: 20}}>25°C</Text>
-          <Text style={{fontSize: 20}}>20%</Text>
-          <Text style={{fontSize: 20}}>O.K</Text>
+          <Text style={{fontSize: 20}}>{Battery[3]}</Text>
+          <Text style={{fontSize: 20}}>{Battery[4]} Cycle</Text>
+          <Text style={{fontSize: 20}}>{Battery[5]} min</Text>
+          <Text style={{fontSize: 20}}>{Battery[6]} min</Text>
+          <Text style={{fontSize: 20}}>{Battery[7]}°C</Text>
+          <Text style={{fontSize: 20}}>{Battery[8]}%</Text>
+          <Text style={{fontSize: 20}}>{Battery[9]}</Text>
         </View>
       </View>
 
@@ -43,6 +34,7 @@ function Datadescription({navigation}) {
             onPress={()=>Alert.alert('click')}
           />
         </View>
+
         <TouchableOpacity onPress={() => navigation.navigate('List')}>
         <View style={styles.Navlist}>
           <Image
@@ -58,14 +50,6 @@ function Datadescription({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  Top: {
-    flex: 0.3,
-  },
-  Header: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1.5,
-  },
   Data:{
     alignItems: 'center',
     justifyContent: 'center',
@@ -104,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Datadescription;
+export default Description;
