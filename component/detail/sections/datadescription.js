@@ -1,72 +1,104 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Chart from './donut.js';
+import { StyleSheet, Text, View, Button, Alert, Image } from 'react-native';
+import Chart from './donut';
 
-export default function App() {
+function Datadescription() {
   return (
-    <View style={styles.container}>
-      <View style={styles.topview}>
+    <>
+      <View style={styles.Top}></View>
+
+      <View style={styles.Header}>
         <Chart></Chart>
       </View>
 
-      <View style={styles.dataview}>
-        <View style={styles.dataempty}></View>
-        <View style={styles.datadescription}>
-          <Text>● VOLTAGE</Text>
-          <Text>● CYCLE COUNT</Text>
-          <Text>● Time to Full</Text>
-          <Text>● Time to Empty</Text>
-          <Text>● TEMP</Text>
-          <Text>● SOH</Text>
-          <Text>● STATUS</Text>
+      <View style={styles.Data}>
+        <View style={styles.Dataempty}></View>
+        <View style={styles.Datadescription}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ VOLTAGE</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ CYCLE COUNT</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ Time to Full</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ Time to Empty</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ TEMP</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ SOH</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ STATUS</Text>
         </View>
-        <View style={styles.datavalue}>
-          <Text>16.5V</Text>
-          <Text>5 count</Text>
-          <Text>0 min</Text>
-          <Text>120 min</Text>
-          <Text>25°C</Text>
-          <Text>90%</Text>
-          <Text>O.K</Text>
+        <View style={styles.Dataval}>
+          <Text style={{fontSize: 20}}>16.5V</Text>
+          <Text style={{fontSize: 20}}>5 count</Text>
+          <Text style={{fontSize: 20}}>0 min</Text>
+          <Text style={{fontSize: 20}}>120 min</Text>
+          <Text style={{fontSize: 20}}>25°C</Text>
+          <Text style={{fontSize: 20}}>20%</Text>
+          <Text style={{fontSize: 20}}>O.K</Text>
         </View>
       </View>
 
-    </View>
-    
+      <View style={styles.Navempty}></View>
+      <View style={styles.Nav}>
+        <View style={styles.Navbtn}>
+          <Button
+            title="Check"
+            onPress={()=>Alert.alert('click')}
+          />
+        </View>
+        <View style={styles.Navlist}>
+          <Image
+          style={styles.image}
+          source={require('../../assets/list.png')}
+          />
+        </View>
+      </View>
+      <View style={styles.Navempty}></View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { alignItems: 'center', justifyContent: 'center', height: 1050 },
-  gauge: {
-    position: 'absolute',
-    width: 100,
-    height: 160,
+  Top: {
+    flex: 0.3,
+  },
+  Header: {
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1.5,
   },
-  gaugeText: {
-    backgroundColor: 'transparent',
-    color: '#000',
-    fontSize: 24,
-  },
-  topview: {
+  Data:{
+    alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dataview:{
-    flex: 2,
     flexDirection: 'row',
   },
-  dataempty:{
+  Dataempty:{
+    flex: 0.4,
+  },
+  Datadescription:{
+    flex: 1,
+  },
+  Dataval:{
+    flex: 1,
+  },
+  Nav:{
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flex: 0.2,
+    flexDirection: 'row',
+  },
+  Navbtn:{
     flex: 0.5,
   },
-  datadescription:{
-    flex: 1,
+  Navlist:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 0.5,
   },
-  datavalue:{
-    flex: 1,
+  image: {
+    width: 45,
+    height: 45,
   },
-})
+  Navempty: {
+    flex: 0.2,
+  },
+});
+
+export default Datadescription;
