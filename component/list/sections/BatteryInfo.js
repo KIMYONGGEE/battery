@@ -3,30 +3,18 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 import ChargingBar from './ChargingBar';
 
-function BatteryInfo({Battery, navigation}){
-    
+export default function BatteryInfo({Battery, navigation}){
 const [firstnbsp, SetFirstnbsp] = useState("          ");
 const [lastnbsp, SetLastnbsp] =   useState("          ");
 
 const [fillingamount, SetFillingmount] = useState();
 const [id, SetId] = useState();
 const [cyclecount, SetCyclecount] = useState();
-const [check , setCheck] = useState(false);
     
 useEffect(()=> {
-  
-
-  // if(Battery.advertising.name == "NONEOSEMI"){
-  //   SetFillingmount(null);
-  //   SetId(null);
-  //   SetCyclecount(null);
-  // }else
-  // {
-    SetFillingmount(Battery.advertising.manufacturerData.bytes[12]);
-    SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
-    SetCyclecount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
-  // }
-  console.log("--------------이거 : "+fillingamount, id, cyclecount);
+  SetFillingmount(Battery.advertising.manufacturerData.bytes[12]);
+  SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
+  SetCyclecount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
 
   if(Battery.id < 10){
       if(Battery.CycleCount < 10){
@@ -45,7 +33,7 @@ useEffect(()=> {
         SetLastnbsp("         ");
     }
   }
-}, [id]);
+});
 
 return (
   <TouchableOpacity 
@@ -85,5 +73,3 @@ const styles = StyleSheet.create({
     height: 80
   },
 });
-
-export default BatteryInfo;
