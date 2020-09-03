@@ -33,6 +33,18 @@ export default function ListPage({navigation}){
   useEffect(() =>{
     AppState.addEventListener('change', handleAppStateChange);
     BleManager.start({showAlert: false});
+    BleManager.enableBluetooth() //Bluetooth를 자동으로 활성화할 수 있게 허용 유무을 묻는다.
+    .then(() => {
+      // Success code
+      if(scanning == false){
+        startScan();
+        update();
+      }
+    })
+    .catch((error) => {
+      // Failure code
+      console.log("The user refuse to enable bluetooth");
+    });
 
     const handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral );
     const handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan );
@@ -53,11 +65,6 @@ export default function ListPage({navigation}){
               });
             }
       });
-    }
-
-    if(scanning == false){
-      startScan();
-      update();
     }
 
     return () => {
