@@ -25,19 +25,16 @@ export default function ListPage({navigation}){
 
   //기존의 peripherals에서 추가, 삭제된 값을 저장하는 State
   const [updatePeripherals, setUpdatePeripherals] = useState(new Map());
-
+  
   const [appState, setAppState] = useState('');
-
 
   const list = Array.from(new Set(updatePeripherals.values()));
   const btnScanTitle = 'Scan Bluetooth (' + (scanning ? 'on' : 'off') + ')';
 
   useEffect(() =>{
     AppState.addEventListener('change', handleAppStateChange);
-
     BleManager.start({showAlert: false});
 
-    //console.log(peripheralsID);
     const handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral );
     const handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan );
     const handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', handleDisconnectedPeripheral );
@@ -46,7 +43,7 @@ export default function ListPage({navigation}){
     if (Platform.OS === 'android' && Platform.Version >= 23) {
         PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
             if (result) {
-              console.log("Permission is OK");
+              //console.log("Permission is OK");
             } else {
               PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
                 if (result) {
@@ -58,6 +55,7 @@ export default function ListPage({navigation}){
             }
       });
     }
+
     if(scanning == false){
       startScan();
       update();
@@ -115,40 +113,77 @@ export default function ListPage({navigation}){
     let existID = updatePeripheralsID;
     //비교해서 들어있지 않은 인덱스를 저장하는 배열
     let noneID = new Array();
+    let shitID = new Array();
 
     //처음이라 updatePeripherals이 비어있다면 비교할게 없음
     //추가 삭제한 부분을 처리해주는 부분
-    console.log("1. 추가된 값(updtaID) : " + updateID);
+    console.log("추가된 값(updtaID) : " + updateID);
     if(updateID.length != 0)
     {
-      console.log("2. 기존 값(existID)   : "+existID);
+      console.log("기존 값(existID)   : " + existID);
+      
+      //1. 똥값인지 비교해서 똥값이 있으면 기존의 값에서 빼준다. ( 스캔중 데이터가 다 들어오지 못해서 생기는 똥값들을 빼준다. : ID로만 비교해서 존재유무를 판단하기 떄문에 똥값을 못빼는 오류가 생긴다.)
+      //2. 똥값을 뺀 기존의 값과 새로들어온 값을 비교하여 뺴준다. ( 새로들어온 값이 기존의 값에 존재하지 않으면 삭제한다 : 동기적으로 데이터를 처리해준다.)
+      
+      //1. 똥값 삭제
+      //똥값인지 비교 20
       existID.forEach(function(item, index){
-        var check = 0;
-        for(var a = 0; a < existID.length; a++){
-          //비교를 해서 check가 0이면 버리는 값이라서 noneID에 저장
-          if(item == updateID[a])
-          {
-            check++;
+        var checkShit = 0;
+        var shitList = [78, 69, 79, 83, 69, 77, 73]; //NEOSEMI
+        var checkList = updatePeripherals.get(item);
+        console.log(typeof checkList);
+        if(typeof checkList != "undefined"){
+          console.log(checkList.advertising.manufacturerData.bytes);
+          for(var a = 0; a < 7; a++){ //20번째부터
+            if(checkList.advertising.manufacturerData.bytes[a+20] == shitList[a]){
+              checkShit++;
+            }
+          }
+          if(checkShit === 0){
+            shitID.push(item);
           }
         }
-        if(check === 0){
+      });
+      //똥값 없애주기
+      for(var a = 0; a < shitID.length; a++){
+        console.log("똥 값      :" + shitID);
+        peripherals.delete(shitID[a]);
+      }
+      //값 변경하기
+      setUpdatePeripherals(peripherals); //updatePeripherals에 값 넣어주기
+
+      //사라진값 삭제
+      //사라질건지 비교
+      existID.forEach(function(item, index){
+        var checkNone = 0;
+        for(var a = 0; a < existID.length; a++){
+          //비교를 해서 check가 0이면 버리는 값이라서 noneID에 저장
+          if(item == updateID[a]){
+            checkNone++;
+          }
+        }
+        if(checkNone === 0){
           noneID.push(item);
         }
       });
       
-      //SCAN 되지 않은 부분 삭제
+      //사라진값 삭제
       for(var a = 0; a < noneID.length; a++){
-        console.log("5. 버릴 값 :"+noneID);
+        console.log("버릴 값      :"+noneID);
         peripherals.delete(noneID[a]);
-      }      
+      }     
     }
-
-    //updatePeripherals에 값 넣어주기 ( 변경하기 )
-    setUpdatePeripherals(peripherals);
-    //updatePeripheralsID에 값 넣어주기 ( 변경하기 )
-    setUpdatePeripheralsID(updateID);
-
-    setPeripheralsID(new Array());
+      //값 변경하기
+      if(existID.length != 0)
+      {
+        setUpdatePeripherals(peripherals); //updatePeripherals에 값 넣어주기
+        setUpdatePeripheralsID(updateID); //updatePeripheralsID에 값 넣어주기
+      }else
+      {
+        setUpdatePeripherals(new Map());  //updatePeripherals에 값 넣어주기
+        setUpdatePeripheralsID(updateID); //updatePeripheralsID에 값 넣어주기
+      }
+      setPeripheralsID(new Array());
   }
 
   const retrieveConnected= () => {
@@ -173,7 +208,9 @@ export default function ListPage({navigation}){
       var InputPeripheralsID = peripheralsID;
       var check=0;
 
-      //console.log('Got ble peripheral', peripheral);
+      //console.log('Got ble peripheral', peripheral.advertising);
+
+
       if (!peripheral.name) {
         peripheral.name = 'NO NAME';
       }
@@ -201,8 +238,13 @@ export default function ListPage({navigation}){
       //SCAN한 peripheral의 id 값을 저장한다.
       InputPeripheralsID.push(peripheral.id);
       setPeripheralsID(InputPeripheralsID);
-    }
-    
+    } 
+  }
+
+  const renderItem = (item) => {
+    return(
+      <BatteryInfo Battery={item} navigation={navigation} />
+    );
   }
 
   return (
@@ -218,7 +260,7 @@ export default function ListPage({navigation}){
             }
             <FlatList
               data={list}
-              renderItem={({ item }) => <BatteryInfo Battery={item} navigation={navigation} /> }
+              renderItem={({ item }) => renderItem(item) }
               keyExtractor={item => item.id.toString()}
             />
           </ScrollView>

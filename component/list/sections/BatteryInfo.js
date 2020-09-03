@@ -7,16 +7,26 @@ function BatteryInfo({Battery, navigation}){
     
 const [firstnbsp, SetFirstnbsp] = useState("          ");
 const [lastnbsp, SetLastnbsp] =   useState("          ");
-const [fillingamount, SetFilling] = useState();
+
+const [fillingamount, SetFillingmount] = useState();
 const [id, SetId] = useState();
-const [cyclecount, SetCycleCount] = useState();
+const [cyclecount, SetCyclecount] = useState();
+const [check , setCheck] = useState(false);
     
 useEffect(()=> {
-  SetFilling(Battery.advertising.manufacturerData.bytes[12]);
-  SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
-  SetCycleCount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
+  
 
-  console.log("이거 : "+fillingamount, id, cyclecount);
+  // if(Battery.advertising.name == "NONEOSEMI"){
+  //   SetFillingmount(null);
+  //   SetId(null);
+  //   SetCyclecount(null);
+  // }else
+  // {
+    SetFillingmount(Battery.advertising.manufacturerData.bytes[12]);
+    SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
+    SetCyclecount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
+  // }
+  console.log("--------------이거 : "+fillingamount, id, cyclecount);
 
   if(Battery.id < 10){
       if(Battery.CycleCount < 10){
@@ -35,7 +45,7 @@ useEffect(()=> {
         SetLastnbsp("         ");
     }
   }
-}, [Battery]);
+}, [id]);
 
 return (
   <TouchableOpacity 
