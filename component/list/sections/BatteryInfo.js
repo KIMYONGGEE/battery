@@ -37,42 +37,48 @@ useEffect(()=> {
 });
 
 return (
-  <TouchableOpacity 
-     onPress={() => navigation.navigate('Detail',{Battery : [id, fillingamount]})}
-
-  // onPress={() => navigation.navigate('Detail'
-  // , 
-  //   { Battery: 
-  //     [Battery.id,
-  //     Battery.FillingAmount,
-  //     Battery.Charge,
-  //     Battery.Voltage,
-  //     Battery.CycleCount,
-  //     Battery.TimeToFull,
-  //     Battery.TimeToEmpty,
-  //     Battery.Temp,
-  //     Battery.SOH,
-  //     Battery.Status]
-  //    }
-    //  )}
-     >
-  <View style={styles.ListView}>
-    <Text style={styles.ListText}>
-      <ChargingBar Battery={fillingamount} />
-      {firstnbsp}{id}{lastnbsp}{cyclecount}{'cycle'}
-    </Text>
+  <TouchableOpacity onPress={() => navigation.navigate('Detail',{Battery : [id, fillingamount]})}>
+   <View style={styles.List}>
+    <View style={styles.ListView}>
+      <Text style={styles.BatteryBar}>
+        <ChargingBar Battery={fillingamount} />
+      </Text>
+    </View>
+    <View style={styles.ListView}>
+      <Text style={styles.ListText}>
+        {id}
+      </Text>
+    </View>
+    <View style={styles.ListView}>
+      <Text style={styles.ListText}>
+        {cyclecount}{'Cycle'}
+      </Text>
+    </View>
   </View>
   </TouchableOpacity>
 );
 }
 
 const styles = StyleSheet.create({
-  ListView: {
+  List: {
     borderBottomWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  ListView: {
+    textAlign: 'center',
+    alignItems: 'center',
+    width: '33%',
+    justifyContent: 'space-around',
+    height: Dimensions.get('window').height/9
+  },
+  BatteryBar: {
+    height: Dimensions.get('window').height/9,
   },
   ListText: {
-    textAlign: 'center',
-    fontSize: 20,
-    height: 80
-  },
+    marginTop : Dimensions.get('window').height/9 * 0.7,
+    alignItems: 'center',
+    fontSize: Dimensions.get('window').width/100 * 4.5,
+    height: Dimensions.get('window').height/9
+  }
 });
