@@ -12,6 +12,7 @@ const [id, SetId] = useState();
 const [cyclecount, SetCyclecount] = useState();
     
 useEffect(()=> {
+
   SetFillingmount(Battery.advertising.manufacturerData.bytes[12]);
   SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
   SetCyclecount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
@@ -37,6 +38,8 @@ useEffect(()=> {
 
 return (
   <TouchableOpacity 
+     onPress={() => navigation.navigate('Detail',{Battery : [id, fillingamount]})}
+
   // onPress={() => navigation.navigate('Detail'
   // , 
   //   { Battery: 

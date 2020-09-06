@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, NativeEventEmitter, NativeModules, Platform,
          PermissionsAndroid, ScrollView, AppState, FlatList, Dimensions, Button, SafeAreaView } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import { updateId } from 'expo-updates';
 
 //page
 import BatteryInfo from './sections/BatteryInfo';
@@ -13,8 +12,9 @@ const window = Dimensions.get('window');
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-export default function ListPage({navigation}){
+export default function ListPage({navigation, route}){
   const [scanning, setScanning] = useState(false);
+  const [connecting, setConnecting] = useState(false);
 
   //SCAN해서 찾은 Beacon 저장하는 State
   const [peripherals, setPeripherals] = useState(new Map());
@@ -27,25 +27,14 @@ export default function ListPage({navigation}){
   const [updatePeripherals, setUpdatePeripherals] = useState(new Map());
   
   const [appState, setAppState] = useState('');
-
   const list = Array.from(new Set(updatePeripherals.values()));
+
+
 
   useEffect(() =>{
     AppState.addEventListener('change', handleAppStateChange);
     BleManager.start({showAlert: false});
-    BleManager.enableBluetooth() //Bluetooth를 자동으로 활성화할 수 있게 허용 유무을 묻는다.
-    .then(() => {
-      // Success code
-      if(scanning == false){
-        startScan();
-        update();
-      }
-    })
-    .catch((error) => {
-      // Failure code
-      console.log("The user refuse to enable bluetooth");
-    });
-
+    const handlerConnect = bleManagerEmitter.addListener('BleManagerConnectPeripheral', handleConnectedPeripheral );
     const handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral );
     const handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan );
     const handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', handleDisconnectedPeripheral );
@@ -66,14 +55,27 @@ export default function ListPage({navigation}){
             }
       });
     }
+    BleManager.enableBluetooth() //Bluetooth를 자동으로 활성화할 수 있게 허용 유무을 묻는다.
+    .then(() => {
+      if(scanning == false && connecting == false){
+        startScan();
+      }
+    })
+    .catch((error) => {
+      // Failure code
+      console.log("The user refuse to enable bluetooth");
+    });
+
 
     return () => {
+      handlerConnect.remove();
       handlerDiscover.remove();
       handlerStop.remove();
       handlerDisconnect.remove();
       handlerUpdate.remove();  
+      // setIsConnection(true);
     };
-  }, [scanning]);
+  }, [scanning, connecting]);
 
   const handleAppStateChange = (nextAppState)  => {
     if (appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -94,6 +96,27 @@ export default function ListPage({navigation}){
       setPeripherals(localperipherals);
     }
     console.log('Disconnected from ' + data.peripheral);
+    setConnecting(false);
+  }
+
+  const handleConnectedPeripheral= (data) => {
+    // BleManager.getConnectedPeripherals(["6e400001-b5a3-f393-e0a9-e50e24dcca9e"]).then((results) => {
+    //   if (results.length == 0) {
+    //     console.log('No connected peripherals');
+    //   }
+      console.log("connected");
+      //var test = results;
+      //console.log(test[0].advertising.manufacturerData);
+      // console.log(results[0].advertising);
+      // var localperipherals = peripherals;
+      // for (var i = 0; i < results.length; i++) {
+      //   var peripheral = results[i];
+      //   peripheral.connected = true;
+      //   localperipherals.set(peripheral.id, peripheral);
+      //   setPeripherals(localperipherals);
+      // }
+    // });
+    setConnecting(true);
   }
 
   const handleUpdateValueForCharacteristic =(data) => {
@@ -106,11 +129,16 @@ export default function ListPage({navigation}){
   }
 
   const startScan = () => {
-    BleManager.scan([], 7, true).then((results) => { //7초이상 권장사항
-      console.log('Scanning...');
-      setScanning(true);
+    async function A(){
+      await BleManager.scan([], 15, true).then((results) => { //7초이상 권장사항
+        update(); 
+
     });
   }
+  A();
+  setScanning(true);
+  }
+
   //스캔한 값에 따라 동기적으로 데이터를 처리하기 위한 함수
   //새로 들어온 값이 기존에 있던 값에 존재하지 않으면 삭제한다 (ID로 비교)
   const update = () =>{
@@ -150,22 +178,6 @@ export default function ListPage({navigation}){
 
     setPeripheralsID(new Array()); //스캔이 끝나면 비워서 새로운 값을 받을 수 있게 한다. 
   }
-
-  const retrieveConnected= () => {
-    BleManager.getConnectedPeripherals([]).then((results) => {
-      if (results.length == 0) {
-        console.log('No connected peripherals')
-      }
-      console.log(results);
-      var localperipherals = peripherals;
-      for (var i = 0; i < results.length; i++) {
-        var peripheral = results[i];
-        peripheral.connected = true;
-        localperipherals.set(peripheral.id, peripheral);
-        setPeripherals(localperipherals);
-      }
-    });
-  }
   //값을 받아오고 저장한다.
   //스캔중 비콘을 키면 세팅하는 시간이 있어서 데이터가 다 들어오지 못한다. (똥값이 생김)
   //이전에는 name == NEOSEMI 로만 판단해서 똥값도 같이 들어왔지만 bytes로 비교해서 이를 방지했다.
@@ -182,7 +194,7 @@ export default function ListPage({navigation}){
       var InputPeripheralsID = peripheralsID;
       var check=0;
 
-      //console.log('Got ble peripheral', peripheral.advertising);
+      console.log('Got ble peripheral', peripheral.id);
 
       if (!peripheral.name) {
         peripheral.name = 'NO NAME';

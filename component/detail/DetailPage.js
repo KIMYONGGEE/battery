@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
+import BleManager from 'react-native-ble-manager';
 
 //Page
 import Chart from './sections/Donut';
@@ -13,7 +14,45 @@ export default function DetailPage({navigation, route }) {
     else
       navigation.setOptions({ title: "[ 00" + route.params.Battery[0] + " ] Description" });
     //3자리, 4자리도 더 만들기
+
+    BleManager.connect("EA:C3:D8:6B:AF:71")
+    .then(() => {
+      // Success code
+      retrieveConnected();
+    })
+    .catch((error) => {
+      // Failure code
+      console.log(error);
+    });
+
+    //끝날때 disconnect
+    return () => {
+      BleManager.disconnect("EA:C3:D8:6B:AF:71")
+      .then(() => {
+        // Success code
+        console.log("Disconnected");
+      })
+      .catch((error) => {
+        // Failure code
+        console.log(error);
+      }); 
+    };
   });
+
+  const retrieveConnected= () => {
+    BleManager.getConnectedPeripherals(["6e400001-b5a3-f393-e0a9-e50e24dcca9e"]).then((results) => {
+      if (results.length == 0) {
+        console.log('No connected peripherals');
+      }
+      var test = results;
+      //console.log(test[0].advertising.manufacturerData);
+      for(var i = 0; i < results.length; i++){
+        console.log("result",i, " = ", results[i].advertising);
+        
+      }
+    });
+  }
+
   return (
     <>
       <View style={styles.Top}/>
