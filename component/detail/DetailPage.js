@@ -2,10 +2,16 @@ import React, {useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 
+import { Dimensions } from 'react-native';
+
 //Page
 import Chart from './sections/Donut';
 import DesCription from './sections/Description';
 
+const window = Dimensions.get("window");
+const screen = Dimensions.get("screen");
+
+var size = Dimensions.get('window').width/100;
 export default function DetailPage({navigation, route }) {
   
   useEffect(() => {
@@ -67,11 +73,12 @@ export default function DetailPage({navigation, route }) {
 
 const styles = StyleSheet.create({
   Top: {
-    flex: 0.3,
+    flex: size/72,
+   //height: Dimensions.get('window').width > 350 ? '60%' : '80%',
   },
   Header: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1.5,
+    flex: size/2.4,
   },
 });

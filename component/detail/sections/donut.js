@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text } from 'react-native'
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
+import { Dimensions } from 'react-native';
+
 export default function donut({Charge}){
 
 const [color, SetColor] = useState("");
@@ -19,17 +21,20 @@ useEffect(()=> {
   else if(Charge <= 100 )SetColor("#00FF73");
 });
 
+var size = Dimensions.get('window').width/100;
+console.log("size   : " + size);
+      
   return (
     <AnimatedCircularProgress
-        size={300}
-        width={35}
+        size={size*70}
+        width={size*8}
         fill={Charge}
         rotation={0}
         tintColor={color}
         backgroundColor="#E6E7D9">
         {
             (fill) => (
-            <Text style={{fontSize: 45,}}>
+            <Text style={{fontSize: size*10,}}>
                 {Charge}%
             </Text>
             )
@@ -39,12 +44,7 @@ useEffect(()=> {
 }
 
 const styles = StyleSheet.create({
-  container: { alignItems: 'center', justifyContent: 'center' },
-  gauge: {
-    position: 'absolute',
-    width: 100,
-    height: 160,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  container: { 
+    alignItems: 'center', 
+    justifyContent: 'center',},
 })

@@ -182,12 +182,13 @@ export default function ListPage({navigation, route}){
   //스캔중 비콘을 키면 세팅하는 시간이 있어서 데이터가 다 들어오지 못한다. (똥값이 생김)
   //이전에는 name == NEOSEMI 로만 판단해서 똥값도 같이 들어왔지만 bytes로 비교해서 이를 방지했다.
   const handleDiscoverPeripheral = (peripheral) => {
-    var checkShit = 0;
+    //var checkShit = 0;
+    var checkShit = 7;
     var shitList = [78, 69, 79, 83, 69, 77, 73]; //NEOSEMI
       for(var a = 0; a < 7; a++){ 
-        if(peripheral.advertising.manufacturerData.bytes[a+20] == shitList[a]){ //20번째부터
+        /*if(peripheral.advertising.manufacturerData.bytes[a+20] == shitList[a]){ //20번째부터
           checkShit++;
-        }
+        }*/
       }
     if(checkShit === 7){
       var localperipherals = peripherals;

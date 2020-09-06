@@ -1,28 +1,37 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity } from 'react-native';
+import { Dimensions } from 'react-native';
+
+
 
 function Description({ navigation, Battery }) {
+
+  var size = Dimensions.get('window').width/100;
+  console.log("size   : " + size);
+
+  //원래 폰트는 20
   return (
     <>
       <View style={styles.Data}>
         <View style={styles.Dataempty}></View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ VOLTAGE</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ CYCLE COUNT</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ Time to Full</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ Time to Empty</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ TEMP</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ SOH</Text>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>ㆍ STATUS</Text>
+          
+          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ VOLTAGE</Text>
+          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ CYCLE COUNT</Text>
+          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ Time to Full</Text>
+          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ Time to Empty</Text>
+          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ TEMP</Text>
+          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ SOH</Text>
+          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ STATUS</Text>
         </View>
         <View style={styles.Dataval}>
-          <Text style={{fontSize: 20}}>{Battery[3]}</Text>
-          <Text style={{fontSize: 20}}>{Battery[4]} Cycle</Text>
-          <Text style={{fontSize: 20}}>{Battery[5]} min</Text>
-          <Text style={{fontSize: 20}}>{Battery[6]} min</Text>
-          <Text style={{fontSize: 20}}>{Battery[7]}°C</Text>
-          <Text style={{fontSize: 20}}>{Battery[8]}%</Text>
-          <Text style={{fontSize: 20}}>{Battery[9]}</Text>
+          <Text style={{fontSize: size*4}}>{Battery[3]}</Text>
+          <Text style={{fontSize: size*4}}>{Battery[4]} Cycle</Text>
+          <Text style={{fontSize: size*4}}>{Battery[5]} min</Text>
+          <Text style={{fontSize: size*4}}>{Battery[6]} min</Text>
+          <Text style={{fontSize: size*4}}>{Battery[7]} °C</Text>
+          <Text style={{fontSize: size*4}}>{Battery[8]} %</Text>
+          <Text style={{fontSize: size*4}}>{Battery[9]}</Text>
         </View>
       </View>
 
