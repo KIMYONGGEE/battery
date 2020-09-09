@@ -17,9 +17,11 @@ var size = Dimensions.get('window').width/100;
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-export default function DetailPage({navigation, route }) {
+export default function DetailPage({navigation, route}) {
 
   const [data, setData] = useState(new Array());
+
+  var chargestatus = route.params.Battery[2];
 
   useEffect(() => {
     if(route.params.Battery[0]<10)
@@ -104,7 +106,7 @@ export default function DetailPage({navigation, route }) {
     <>
       <View style={styles.Top}/>
       <View style={styles.Header}>
-        <Chart Charge={route.params.Battery[1]}></Chart>
+        <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} ></Chart>
       </View>
       <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
     </>

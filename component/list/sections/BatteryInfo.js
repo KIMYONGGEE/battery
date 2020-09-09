@@ -20,7 +20,7 @@ useEffect(()=> {
 });
 
 return (
-  <TouchableOpacity onPress={() => navigation.navigate('Detail',{Battery : [id, fillingamount]})}>
+  <TouchableOpacity onPress={() => navigation.navigate('Detail',{Battery : [id, fillingamount, chargestate]})}>
    <View style={styles.List}>
     <View style={styles.ListView}>
       <Text style={styles.BatteryBar}>

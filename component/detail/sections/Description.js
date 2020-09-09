@@ -9,7 +9,7 @@ function Description({ navigation, Battery, Data}) {
   var cyclecount = Data[4] + (Data[5]*256); // 회 
   var ttf = Data[6] + (Data[7]*256); // 분 
   var tte = Data[8] + (Data[9]*256); // 분 
-  var temperature = ((Data[10] + (Data[11]*256)) + 27.315) * 10 // 셀시어스   
+  var temperature = (Data[10] + (Data[11]*256))/10 + 273.15  // 셀시어스   
   var soh = Data[12]; // %? hex? Ten?
 
  /* const [voltage, SetVoltage] = useState();
@@ -40,6 +40,7 @@ function Description({ navigation, Battery, Data}) {
       <View style={styles.Data}>
         <View style={styles.Dataempty}></View>
         <View style={styles.Datadescription}>
+
           <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ VOLTAGE</Text>
           <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ CYCLE COUNT</Text>
           <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ Time to Full</Text>
