@@ -4,36 +4,19 @@ import {StyleSheet, View, Text, TouchableOpacity, Dimensions} from 'react-native
 import ChargingBar from './ChargingBar';
 
 export default function BatteryInfo({Battery, navigation}){
-const [firstnbsp, SetFirstnbsp] = useState("          ");
-const [lastnbsp, SetLastnbsp] =   useState("          ");
 
 const [fillingamount, SetFillingmount] = useState();
 const [id, SetId] = useState();
 const [cyclecount, SetCyclecount] = useState();
+const [chargestate, SetChargestate] = useState();
     
 useEffect(()=> {
 
   SetFillingmount(Battery.advertising.manufacturerData.bytes[12]);
   SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
   SetCyclecount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
+  SetChargestate(Battery.advertising.manufacturerData.bytes[17]);
 
-  if(Battery.id < 10){
-      if(Battery.CycleCount < 10){
-          SetFirstnbsp("          ");
-           SetLastnbsp("          ");
-      }else{
-          SetFirstnbsp("          ");
-           SetLastnbsp("         ");
-      }
-  }else{
-      if(Battery.CycleCount < 10){
-        SetFirstnbsp("         ");
-        SetLastnbsp("          ");
-    }else{
-        SetFirstnbsp("         ");
-        SetLastnbsp("         ");
-    }
-  }
 });
 
 return (
@@ -41,7 +24,7 @@ return (
    <View style={styles.List}>
     <View style={styles.ListView}>
       <Text style={styles.BatteryBar}>
-        <ChargingBar Battery={fillingamount} />
+        <ChargingBar Battery={fillingamount} Chargestate={chargestate}/>
       </Text>
     </View>
     <View style={styles.ListView}>

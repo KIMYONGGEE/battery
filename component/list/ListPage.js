@@ -173,10 +173,10 @@ export default function ListPage({navigation, route}){
         peripherals.delete(noneID[a]);
       }     
     }
+    
     //값 변경하기
     setUpdatePeripherals(peripherals);
     setUpdatePeripheralsID(updateID);
-
     setPeripheralsID(new Array()); //스캔이 끝나면 비워서 새로운 값을 받을 수 있게 한다. 
   }
 
