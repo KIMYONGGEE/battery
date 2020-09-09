@@ -37,7 +37,6 @@ export default function ListPage({navigation, route}){
     const handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral );
     const handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan );
     const handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', handleDisconnectedPeripheral );
-    const handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );
 
     if (Platform.OS === 'android' && Platform.Version >= 23) {
         PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
@@ -71,9 +70,6 @@ export default function ListPage({navigation, route}){
       handlerDiscover.remove();
       handlerStop.remove();
       handlerDisconnect.remove();
-      //handlerUpdate.remove();  
-      //console.log("return listpage");
-      // setIsConnection(true);
     };
   }, [scanning, connecting]);
 
@@ -119,10 +115,6 @@ export default function ListPage({navigation, route}){
     setConnecting(true);
   }
 
-  const handleUpdateValueForCharacteristic =(data) => {
-    console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
-  }
-
   const handleStopScan =() => {
     console.log('Scan is stopped');
     setScanning(false);
@@ -133,7 +125,6 @@ export default function ListPage({navigation, route}){
     async function A(){
       await BleManager.scan([], 15, true).then((results) => { //7초이상 권장사항
         update(); 
-
     });
   }
   A();
@@ -180,7 +171,6 @@ export default function ListPage({navigation, route}){
     setPeripheralsID(new Array()); //스캔이 끝나면 비워서 새로운 값을 받을 수 있게 한다. 
   }
 
-
   //값을 받아오고 저장한다.
   //스캔중 비콘을 키면 세팅하는 시간이 있어서 데이터가 다 들어오지 못한다. (똥값이 생김)
   //이전에는 name == NEOSEMI 로만 판단해서 똥값도 같이 들어왔지만 bytes로 비교해서 이를 방지했다.
@@ -197,7 +187,8 @@ export default function ListPage({navigation, route}){
       var InputPeripheralsID = peripheralsID;
       var check=0;
 
-      console.log('Got ble peripheral', peripheral.advertising.manufacturerData.bytes);
+      console.log(peripheral.id);
+      //console.log('Got ble peripheral', peripheral.advertising.manufacturerData.bytes);
 
       if (!peripheral.name) {
         peripheral.name = 'NO NAME';
@@ -210,13 +201,11 @@ export default function ListPage({navigation, route}){
       }else{ //그 이후에는 비교하며 넣는다.
         Array.from(peripherals.keys()).forEach(function(item, index){
           if(item == peripheral.id)check++;
-          //console.log(index + " + "+item +" + "+ peripheral.id+ "= " + check);
         });
           if(check == 0){
           //SCAN하면서 peripherals에 데이터를 바로 저장한다. 
           localperipherals.set(peripheral.id, peripheral);
           setPeripherals(localperipherals);
-          //console.log(Array.from(peripherals.keys()));
         }
       }
       //SCAN한 peripheral의 id 값을 저장한다.
@@ -228,7 +217,6 @@ export default function ListPage({navigation, route}){
   return (
     <>
     <StatusBar backgroundColor={'#ff6600'} barStyle="light-content"/> 
-    
     <SafeAreaView style={styles.wrap}>
     <ScrollView style={styles.scroll}>
             {(list.length == 0) &&

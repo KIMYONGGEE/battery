@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { NativeEventEmitter, NativeModules, StyleSheet, View, Dimensions } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import {stringToBytes, bytesToString} from "convert-string";
@@ -14,23 +14,21 @@ const screen = Dimensions.get("screen");
 
 var size = Dimensions.get('window').width/100;
 
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+
 export default function DetailPage({navigation, route }) {
-  
+
+  const [test, setTest] = useState(new Array());
+
   useEffect(() => {
-    // bleManagerEmitter.addListener(
-    //   "BleManagerDidUpdateValueForCharacteristic",
-    //   ({ value, peripheral, characteristic, service }) => {
-    //     // Convert bytes array to string
-    //     const data = bytesToString(value);
-    //     console.log(`Recieved ${data} for characteristic ${characteristic}`);
-    //   }
-    // );
-    
     if(route.params.Battery[0]<10)
       navigation.setOptions({ title: "[ 000" + route.params.Battery[0] + " ] Description" });
     else
       navigation.setOptions({ title: "[ 00" + route.params.Battery[0] + " ] Description" });
     //3자리, 4자리도 더 만들기
+
+    const handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );
 
     BleManager.connect("EA:C3:D8:6B:AF:71")
     .then(() => {
@@ -44,10 +42,11 @@ export default function DetailPage({navigation, route }) {
 
     //끝날때 disconnect
     return () => {
+      handlerUpdate.remove();  
       BleManager.disconnect("EA:C3:D8:6B:AF:71")
       .then(() => {
         // Success code
-        console.log("Disconnected");
+        // console.log("Disconnected");
       })
       .catch((error) => {
         // Failure code
@@ -96,13 +95,18 @@ export default function DetailPage({navigation, route }) {
     });
   }
 
+  const handleUpdateValueForCharacteristic =(data) => {
+    setTest(data.value);
+    console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
+  }
+
   return (
     <>
       <View style={styles.Top}/>
       <View style={styles.Header}>
         <Chart Charge={route.params.Battery[1]}></Chart>
       </View>
-      <DesCription navigation={navigation} Battery={route.params.Battery}/>
+      <DesCription navigation={navigation} Battery={route.params.Battery} test={test}/>
     </>
   );
 }
