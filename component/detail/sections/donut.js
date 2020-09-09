@@ -4,14 +4,11 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 export default function donut({Charge, Chargestatus}){
 
-const [imgpath, setImagepath] = useState('');
-
 const [color, SetColor] = useState("");
 
 var charging = "";
 
 if(Chargestatus == 0) {
-//setImagepath(require('../../../assets/main/100.png'));
 charging="Charging..."
 }
 useEffect(()=> {

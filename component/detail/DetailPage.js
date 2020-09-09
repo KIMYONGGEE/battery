@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { NativeEventEmitter, NativeModules, StyleSheet, View, Dimensions } from 'react-native';
+import { NativeEventEmitter, NativeModules, StyleSheet, View, Dimensions, Image, Text } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import {stringToBytes, bytesToString} from "convert-string";
 
@@ -18,10 +18,13 @@ const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function DetailPage({navigation, route}) {
+  
 
   const [data, setData] = useState(new Array());
 
+  //var imgpath ='';
   var chargestatus = route.params.Battery[2];
+  //if(chargestatus == 0) imgpath = '../../assets/main/detailcharging.png';
 
   useEffect(() => {
     if(route.params.Battery[0]<10)
@@ -108,6 +111,7 @@ export default function DetailPage({navigation, route}) {
       <View style={styles.Header}>
         <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} ></Chart>
       </View>
+
       <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
     </>
   );
