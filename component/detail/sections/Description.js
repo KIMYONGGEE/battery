@@ -1,21 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity } from 'react-native';
-import { Dimensions } from 'react-native';
-
-
+import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity,
+        Dimensions } from 'react-native';
 
 function Description({ navigation, Battery }) {
-
   var size = Dimensions.get('window').width/100;
-  console.log("size   : " + size);
-
-  //원래 폰트는 20
+  
   return (
     <>
       <View style={styles.Data}>
         <View style={styles.Dataempty}></View>
         <View style={styles.Datadescription}>
-          
           <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ VOLTAGE</Text>
           <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ CYCLE COUNT</Text>
           <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ Time to Full</Text>

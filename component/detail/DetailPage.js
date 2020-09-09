@@ -1,20 +1,31 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, View } from 'react-native';
+import { NativeEventEmitter, NativeModules, StyleSheet, View, Dimensions } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-
-import { Dimensions } from 'react-native';
+import {stringToBytes, bytesToString} from "convert-string";
 
 //Page
-import Chart from './sections/Donut';
+import Chart from './sections/donut';
 import DesCription from './sections/Description';
+
+const notidata = stringToBytes("123");
 
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
 var size = Dimensions.get('window').width/100;
+
 export default function DetailPage({navigation, route }) {
   
   useEffect(() => {
+    // bleManagerEmitter.addListener(
+    //   "BleManagerDidUpdateValueForCharacteristic",
+    //   ({ value, peripheral, characteristic, service }) => {
+    //     // Convert bytes array to string
+    //     const data = bytesToString(value);
+    //     console.log(`Recieved ${data} for characteristic ${characteristic}`);
+    //   }
+    // );
+    
     if(route.params.Battery[0]<10)
       navigation.setOptions({ title: "[ 000" + route.params.Battery[0] + " ] Description" });
     else
@@ -52,10 +63,36 @@ export default function DetailPage({navigation, route }) {
       }
       var test = results;
       //console.log(test[0].advertising.manufacturerData);
-      for(var i = 0; i < results.length; i++){
-        console.log("result",i, " = ", results[i].advertising);
+      // for(var i = 0; i < results.length; i++){
+      //   console.log("result",i, " = ", results[i].advertising);
         
-      }
+      // }
+
+      setTimeout(() =>{
+        BleManager.retrieveServices("EA:C3:D8:6B:AF:71").then((peripheralInfo) => {
+          console.log("Peripheral info:", peripheralInfo.characteristics[5]);
+
+          var notichar = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+          var peripheralId = "EA:C3:D8:6B:AF:71";
+          var serviceId = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+          var writechar = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+
+          setTimeout(() =>{
+            BleManager.startNotification(peripheralId, serviceId, notichar).then(() =>{
+              console.log("start notification");
+
+              BleManager.write(peripheralId, serviceId, writechar, notidata).then(() =>{
+                console.log("write complete = ", notidata);
+              }).catch((error)=>{
+                console.log("write error = ", error);
+              });
+            }).catch((error) =>{
+              console.log("notification error = ", error);
+            });
+          }, 200);
+        });
+      }, 900);
+
     });
   }
 
@@ -74,7 +111,6 @@ export default function DetailPage({navigation, route }) {
 const styles = StyleSheet.create({
   Top: {
     flex: size/72,
-   //height: Dimensions.get('window').width > 350 ? '60%' : '80%',
   },
   Header: {
     alignItems: 'center',

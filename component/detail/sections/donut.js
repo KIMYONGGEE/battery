@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, Dimensions } from 'react-native'
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
-
-import { Dimensions } from 'react-native';
 
 export default function donut({Charge}){
 
@@ -22,8 +20,7 @@ useEffect(()=> {
 });
 
 var size = Dimensions.get('window').width/100;
-console.log("size   : " + size);
-      
+
   return (
     <AnimatedCircularProgress
         size={size*70}

@@ -29,9 +29,8 @@ export default function ListPage({navigation, route}){
   const [appState, setAppState] = useState('');
   const list = Array.from(new Set(updatePeripherals.values()));
 
-
-
   useEffect(() =>{
+    //console.log("use effect start");
     AppState.addEventListener('change', handleAppStateChange);
     BleManager.start({showAlert: false});
     const handlerConnect = bleManagerEmitter.addListener('BleManagerConnectPeripheral', handleConnectedPeripheral );
@@ -72,7 +71,8 @@ export default function ListPage({navigation, route}){
       handlerDiscover.remove();
       handlerStop.remove();
       handlerDisconnect.remove();
-      handlerUpdate.remove();  
+      //handlerUpdate.remove();  
+      //console.log("return listpage");
       // setIsConnection(true);
     };
   }, [scanning, connecting]);
@@ -129,6 +129,7 @@ export default function ListPage({navigation, route}){
   }
 
   const startScan = () => {
+    console.log("Scanning start");
     async function A(){
       await BleManager.scan([], 15, true).then((results) => { //7초이상 권장사항
         update(); 
@@ -147,12 +148,12 @@ export default function ListPage({navigation, route}){
     let noneID = new Array();                          //비교해서 들어있지 않은 인덱스를 저장하는 배열
     
     //추가 삭제한 부분을 처리해주는 부분
-    console.log("추가된 값(updtaID) : " + updateID);
+    //console.log("추가된 값(updtaID) : " + updateID);
 
     if(existID.length != 0) //기존에 들어있는 값이 있을때에만 비교를 한다. 새로들어온 값은 항상 비교한다. 
     {
       //사라진 값이 있는지 비교
-      console.log("기존 값(existID)   : " + existID);
+      //console.log("기존 값(existID)   : " + existID);
       existID.forEach(function(item, index){
         var checkNone = 0;
         for(var a = 0; a < updateID.length; a++){ //비교를 해서 check가 0이면 버리는 값이라서 noneID에 저장
@@ -161,13 +162,13 @@ export default function ListPage({navigation, route}){
           }
         }
         if(checkNone === 0){
-          console.log(item);
+          //console.log(item);
           noneID.push(item);
         }
       });
       
       //사라진값 삭제
-      console.log("버릴 값            : " + noneID);
+      //console.log("버릴 값            : " + noneID);
       for(var a = 0; a < noneID.length; a++){
         peripherals.delete(noneID[a]);
       }     
@@ -178,24 +179,25 @@ export default function ListPage({navigation, route}){
 
     setPeripheralsID(new Array()); //스캔이 끝나면 비워서 새로운 값을 받을 수 있게 한다. 
   }
+
+
   //값을 받아오고 저장한다.
   //스캔중 비콘을 키면 세팅하는 시간이 있어서 데이터가 다 들어오지 못한다. (똥값이 생김)
   //이전에는 name == NEOSEMI 로만 판단해서 똥값도 같이 들어왔지만 bytes로 비교해서 이를 방지했다.
   const handleDiscoverPeripheral = (peripheral) => {
-    //var checkShit = 0;
-    var checkShit = 7;
+    var checkShit = 0;
     var shitList = [78, 69, 79, 83, 69, 77, 73]; //NEOSEMI
       for(var a = 0; a < 7; a++){ 
-        /*if(peripheral.advertising.manufacturerData.bytes[a+20] == shitList[a]){ //20번째부터
+        if(peripheral.advertising.manufacturerData.bytes[a+20] == shitList[a]){ //20번째부터
           checkShit++;
-        }*/
+        }
       }
     if(checkShit === 7){
       var localperipherals = peripherals;
       var InputPeripheralsID = peripheralsID;
       var check=0;
 
-      console.log('Got ble peripheral', peripheral.id);
+      console.log('Got ble peripheral', peripheral.advertising.manufacturerData.bytes);
 
       if (!peripheral.name) {
         peripheral.name = 'NO NAME';
@@ -214,7 +216,7 @@ export default function ListPage({navigation, route}){
           //SCAN하면서 peripherals에 데이터를 바로 저장한다. 
           localperipherals.set(peripheral.id, peripheral);
           setPeripherals(localperipherals);
-          console.log(Array.from(peripherals.keys()));
+          //console.log(Array.from(peripherals.keys()));
         }
       }
       //SCAN한 peripheral의 id 값을 저장한다.

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import { Dimensions } from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Dimensions} from 'react-native';
 
 import ChargingBar from './ChargingBar';
 
@@ -65,6 +64,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    borderBottomWidth: 1,
   },
   ListView: {
     textAlign: 'center',
@@ -81,5 +81,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: Dimensions.get('window').width/100 * 4.5,
     height: Dimensions.get('window').height/9
-  }
+  },
 });
