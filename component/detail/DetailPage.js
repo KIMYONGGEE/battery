@@ -19,7 +19,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 export default function DetailPage({navigation, route }) {
 
-  const [test, setTest] = useState(new Array());
+  const [data, setData] = useState(new Array());
 
   useEffect(() => {
     if(route.params.Battery[0]<10)
@@ -96,7 +96,7 @@ export default function DetailPage({navigation, route }) {
   }
 
   const handleUpdateValueForCharacteristic =(data) => {
-    setTest(data.value);
+    setData(data.value);
     console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
   }
 
@@ -106,7 +106,7 @@ export default function DetailPage({navigation, route }) {
       <View style={styles.Header}>
         <Chart Charge={route.params.Battery[1]}></Chart>
       </View>
-      <DesCription navigation={navigation} Battery={route.params.Battery} test={test}/>
+      <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
     </>
   );
 }
