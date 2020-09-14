@@ -9,8 +9,9 @@ import DetailPage from './component/detail/DetailPage';
 const Stack = createStackNavigator();
 
 export default function App() {
+
   return (
-    <NavigationContainer>
+    <NavigationContainer> 
       <Stack.Navigator initialRouteName="List">
         <Stack.Screen
           name="List"

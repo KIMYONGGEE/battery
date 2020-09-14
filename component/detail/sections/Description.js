@@ -34,7 +34,6 @@ function Description({ navigation, Battery, Data}) {
 
   
   });*/  
-  console.log("no charging , code :", voltage);
   return (
     <>
       <View style={styles.Data}>

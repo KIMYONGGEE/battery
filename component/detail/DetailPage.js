@@ -104,14 +104,12 @@ export default function DetailPage({navigation, route}) {
     setData(data.value);
     console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
   }
-
   return (
     <>
       <View style={styles.Top} />
       <View style={styles.Header}>
         <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} ></Chart>
       </View>
-
       <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
     </>
   );

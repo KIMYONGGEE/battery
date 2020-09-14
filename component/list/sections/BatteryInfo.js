@@ -9,12 +9,14 @@ const [fillingamount, SetFillingmount] = useState();
 const [id, SetId] = useState();
 const [cyclecount, SetCyclecount] = useState();
 const [chargestate, SetChargestate] = useState();
+const [batteryerr, SetBatteryerr] = useState();
     
 useEffect(()=> {
 
   SetFillingmount(Battery.advertising.manufacturerData.bytes[12]);
   SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
   SetCyclecount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
+  SetBatteryerr(Battery.advertising.manufacturerData.bytes[16]);
   SetChargestate(Battery.advertising.manufacturerData.bytes[17]);
 
 });
@@ -24,7 +26,7 @@ return (
    <View style={styles.List}>
     <View style={styles.ListView}>
       <Text style={styles.BatteryBar}>
-        <ChargingBar Battery={fillingamount} Chargestate={chargestate}/>
+        <ChargingBar Battery={fillingamount} Chargestate={chargestate} Batteryerr={batteryerr}/>
       </Text>
     </View>
     <View style={styles.ListView}>
