@@ -27,14 +27,9 @@ useEffect(()=> {
   else if(Charge <= 90 )SetColor("#00FF1A");
   else if(Charge <= 100 )SetColor("#00FF73");
   
-  if(Chargestatus == 1) {
-    setImagepath(require('../../../assets/main/c0.png'));
-  }
-
-  if(SG!=0 || PF!=0){
-    setImagepath(require('../../../assets/main/e100.png'));
-  }
-  
+  if(Chargestatus == 1)setImagepath(require('../../../assets/main/c0.png'));
+  if(SG!=0 || PF!=0) setImagepath(require('../../../assets/main/e100.png'));
+  else setImagepath(require('../../../assets/main/null.png'));
 });
 
 
