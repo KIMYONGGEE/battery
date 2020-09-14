@@ -34,29 +34,28 @@ function Description({ navigation, Battery, Data}) {
 
   
   });*/  
-
+  console.log("no charging , code :", voltage);
   return (
     <>
       <View style={styles.Data}>
         <View style={styles.Dataempty}></View>
         <View style={styles.Datadescription}>
-
-          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ VOLTAGE</Text>
-          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ CYCLE COUNT</Text>
-          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ Time to Full</Text>
-          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ Time to Empty</Text>
-          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ TEMP</Text>
-          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ SOH</Text>
-          <Text style={{fontSize: size*4, fontWeight: 'bold'}}>ㆍ STATUS</Text>
+          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#F5D0A9'}}>ㆍ VOLTAGE</Text>
+          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#F5D0A9'}}>ㆍ CYCLE COUNT</Text>
+          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#F5D0A9'}}>ㆍ Time to Full</Text>
+          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#F5D0A9'}}>ㆍ Time to Empty</Text>
+          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#F5D0A9'}}>ㆍ TEMP</Text>
+          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#F5D0A9'}}>ㆍ SOH</Text>
+          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#F5D0A9'}}>ㆍ STATUS</Text>
         </View>
         <View style={styles.Dataval}>
-          <Text style={{fontSize: size*4}}>{voltage} V</Text>
-          <Text style={{fontSize: size*4}}>{cyclecount} Cycle</Text>
-          <Text style={{fontSize: size*4}}>{ttf} min</Text>
-          <Text style={{fontSize: size*4}}>{tte} min</Text>
-          <Text style={{fontSize: size*4}}>{temperature} °C</Text>
-          <Text style={{fontSize: size*4}}>{soh} %</Text>
-          <Text style={{fontSize: size*4}}>{Battery[9]}</Text>
+          <Text style={{fontSize: size*4.5, color:'#FBF5EF'}}>{voltage} V</Text>
+          <Text style={{fontSize: size*4.5, color:'#FBF5EF'}}>{cyclecount} Cycle</Text>
+          <Text style={{fontSize: size*4.5, color:'#FBF5EF'}}>{ttf} min</Text>
+          <Text style={{fontSize: size*4.5, color:'#FBF5EF'}}>{tte} min</Text>
+          <Text style={{fontSize: size*4.5, color:'#FBF5EF'}}>{temperature} °C</Text>
+          <Text style={{fontSize: size*4.5, color:'#FBF5EF'}}>{soh} %</Text>
+          <Text style={{fontSize: size*4.5, color:'#FBF5EF'}}>{Battery[9]}</Text>
         </View>
       </View>
 
@@ -64,19 +63,13 @@ function Description({ navigation, Battery, Data}) {
       <View style={styles.Nav}>
         <View style={styles.Navbtn}>
           <Button
-            title="Check"
-            onPress={()=>Alert.alert('click')}
+            color="#DF7401"
+            title="C h e c k"
+            fontSize =""
+            onPress={()=>Alert.alert('Send Data to Beacon')}
           />
         </View>
 
-        <TouchableOpacity onPress={() => navigation.navigate('List')}>
-        <View style={styles.Navlist}>
-          <Image
-          style={styles.image}
-          source={require('../../../assets/list.png')}
-          />
-        </View>
-        </TouchableOpacity>
       </View>
       <View style={styles.Navempty}></View>
     </>
@@ -89,6 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     flexDirection: 'row',
+    backgroundColor: '#B45F04',
   },
   Dataempty:{
     flex: 0.4,
@@ -100,6 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   Nav:{
+    backgroundColor: '#B45F04',
     alignItems: 'center',
     justifyContent: 'space-around',
     flex: 0.2,
@@ -118,7 +113,10 @@ const styles = StyleSheet.create({
     height: 45,
   },
   Navempty: {
+    backgroundColor: '#B45F04',
     flex: 0.2,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

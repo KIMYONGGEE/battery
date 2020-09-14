@@ -107,7 +107,7 @@ export default function DetailPage({navigation, route}) {
 
   return (
     <>
-      <View style={styles.Top}/>
+      <View style={styles.Top} />
       <View style={styles.Header}>
         <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} ></Chart>
       </View>
@@ -121,10 +121,12 @@ export default function DetailPage({navigation, route}) {
 const styles = StyleSheet.create({
   Top: {
     flex: size/72,
+    backgroundColor: '#DF7401',
   },
   Header: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: size/2.4,
+    backgroundColor: '#DF7401',
   },
 });

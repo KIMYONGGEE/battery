@@ -216,14 +216,31 @@ export default function ListPage({navigation, route}){
 
   return (
     <>
-    <StatusBar backgroundColor={'#ff6600'} barStyle="light-content"/> 
+    <StatusBar backgroundColor={'#DF7401'} barStyle="light-content"/> 
     <SafeAreaView style={styles.wrap}>
     <ScrollView style={styles.scroll}>
+            {
+              <View style={{flex:1, margin: 20}, styles.container}>
+                 <Text style={{textAlign: 'left',  
+                              width: Dimensions.get('window').height/15 * 0.7, 
+                              fontSize: Dimensions.get('window').width/100 * 5}}></Text>
+                <Text style={{textAlign: 'left',   
+                              width: Dimensions.get('window').height/5 * 0.88,
+                              fontSize: Dimensions.get('window').width/100 * 5,fontWeight: 'bold'}}>Status</Text>
+                <Text style={{textAlign: 'left', 
+                              width: Dimensions.get('window').height/5 * 0.7,
+                              fontSize: Dimensions.get('window').width/100 * 5,fontWeight: 'bold'}}>ID</Text>
+                <Text style={{textAlign: 'left', 
+                              width: Dimensions.get('window').height/5 * 0.7,
+                              fontSize: Dimensions.get('window').width/100 * 5,fontWeight: 'bold'}}>Cycle</Text>
+              </View>
+            }
             {(list.length == 0) &&
               <View style={{flex:1, margin: 20}}>
                 <Text style={{textAlign: 'center'}}>검색중</Text>
               </View>
             }
+        
             <FlatList
               data={list}
               renderItem={({ item }) => <BatteryInfo Battery={item} navigation={navigation} /> }
@@ -238,7 +255,7 @@ export default function ListPage({navigation, route}){
 const styles = StyleSheet.create({
   Header: {
     height: "10%",
-    backgroundColor: '#ff6600',
+    backgroundColor: '#FE9A2E',
     justifyContent: 'space-between',
   },
   HeaderTitle: {
@@ -250,5 +267,10 @@ const styles = StyleSheet.create({
   scroll:{
     height: "100%",
     backgroundColor: '#FFFFFF',
+  },
+  container:{
+    flex:0,
+    flexDirection:'row',
+    backgroundColor: '#FE9A2E',
   },
 });

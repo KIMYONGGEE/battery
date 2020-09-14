@@ -37,7 +37,7 @@ var size = Dimensions.get('window').width/100;
         backgroundColor="#E6E7D9">
         {
             (fill) => (
-            <Text style={{fontSize: size*10,}}>
+            <Text style={{fontSize: size*10,color:'#FBF5EF'}}>
                 {Charge}%
             </Text>
             )

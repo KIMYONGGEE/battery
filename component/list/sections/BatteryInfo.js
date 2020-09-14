@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderBottomWidth: 1,
+    backgroundColor: '#FBF5EF',
   },
   ListView: {
     textAlign: 'center',
