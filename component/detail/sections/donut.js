@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, Dimensions,Image } from 'react-native'
+import { StyleSheet, Text, Dimensions,Image, View } from 'react-native'
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
-export default function donut({Charge, Chargestatus}){
+export default function donut({Charge, Chargestatus, Data}){
 
 const [color, SetColor] = useState("");
+const [imgpath, setImagepath] = useState('');
 
-var charging = "";
+var charging = "\n"+Charge +"%\n";
 
-if(Chargestatus == 0) {
-charging="Charging..."
-}
+var SG = Data[13];
+var PF = Data[14];
+
+var size = Dimensions.get('window').width/100;
+
+
 useEffect(()=> {
   if(Charge <= 10)SetColor("#FF0000");
   else if(Charge <= 20 )SetColor("#FF3300");
@@ -22,23 +26,33 @@ useEffect(()=> {
   else if(Charge <= 80 )SetColor("#4CFF00");
   else if(Charge <= 90 )SetColor("#00FF1A");
   else if(Charge <= 100 )SetColor("#00FF73");
+  
+  if(Chargestatus == 1) {
+    setImagepath(require('../../../assets/main/c0.png'));
+  }
+
+  if(SG!=0 || PF!=0){
+    setImagepath(require('../../../assets/main/e100.png'));
+  }
+  
 });
 
-var size = Dimensions.get('window').width/100;
 
+console.log(SG);
 
   return (
     <AnimatedCircularProgress
-        size={size*70}
+        size={size*80}
         width={size*8}
         fill={Charge} 
         rotation={0}
         tintColor={color}
-        backgroundColor="#E6E7D9">
+        backgroundColor="#ffffff">
         {
             (fill) => (
-            <Text style={{fontSize: size*10,color:'#FBF5EF'}}>
-                {Charge}%
+            <Text style={{fontSize: size*14,color:'#ffffff'}}>
+              <Image style={{height:size*13,width:size*27.8}} source={imgpath}/>
+              {charging} 
             </Text>
             )
         }
@@ -49,5 +63,10 @@ var size = Dimensions.get('window').width/100;
 const styles = StyleSheet.create({
   container: { 
     alignItems: 'center', 
-    justifyContent: 'center',},
+    justifyContent: 'center',
+  },
+  image: {
+    width:100,
+    height:47,
+  }
 })

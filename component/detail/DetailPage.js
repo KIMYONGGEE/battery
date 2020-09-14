@@ -13,9 +13,10 @@ const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
 var size = Dimensions.get('window').width/100;
-
+var stateimage ='';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+
 
 export default function DetailPage({navigation, route}) {
   
@@ -104,11 +105,12 @@ export default function DetailPage({navigation, route}) {
     setData(data.value);
     console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
   }
+
   return (
     <>
       <View style={styles.Top} />
       <View style={styles.Header}>
-        <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} ></Chart>
+        <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} Data={data}></Chart>
       </View>
       <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
     </>
@@ -127,4 +129,8 @@ const styles = StyleSheet.create({
     flex: size/2.4,
     backgroundColor: '#DF7401',
   },
+  image: {
+    width:100,
+    height:47,
+  }
 });
