@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, NativeEventEmitter, NativeModules, Platform,
-         PermissionsAndroid, ScrollView, AppState, FlatList, Dimensions, Button, SafeAreaView } from 'react-native';
+         PermissionsAndroid, AppState, FlatList, Dimensions, Button, SafeAreaView, RefreshControl } from 'react-native';
 import BleManager from 'react-native-ble-manager';
+import { ScrollView } from 'react-native-gesture-handler';
 
 //page
 import BatteryInfo from './sections/BatteryInfo';
@@ -26,18 +27,20 @@ export default function ListPage({navigation, route}){
   //기존의 peripherals에서 추가, 삭제된 값을 저장하는 State
   const [updatePeripherals, setUpdatePeripherals] = useState(new Map());
   
+  const [refreshing, setRefreshing] = useState(false);
+  const [test, setTest] = useState(false);
+
   const [appState, setAppState] = useState('');
   const list = Array.from(new Set(updatePeripherals.values()));
 
   useEffect(() =>{
-    //console.log("use effect start");
     AppState.addEventListener('change', handleAppStateChange);
     BleManager.start({showAlert: false});
     const handlerConnect = bleManagerEmitter.addListener('BleManagerConnectPeripheral', handleConnectedPeripheral );
     const handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral );
     const handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan );
     const handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', handleDisconnectedPeripheral );
-
+    
     if (Platform.OS === 'android' && Platform.Version >= 23) {
         PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
             if (result) {
@@ -71,7 +74,7 @@ export default function ListPage({navigation, route}){
       handlerStop.remove();
       handlerDisconnect.remove();
     };
-  }, [scanning, connecting]);
+  }, [scanning, connecting, test]);
 
   const handleAppStateChange = (nextAppState)  => {
     if (appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -96,22 +99,7 @@ export default function ListPage({navigation, route}){
   }
 
   const handleConnectedPeripheral= (data) => {
-    // BleManager.getConnectedPeripherals(["6e400001-b5a3-f393-e0a9-e50e24dcca9e"]).then((results) => {
-    //   if (results.length == 0) {
-    //     console.log('No connected peripherals');
-    //   }
-      console.log("connected");
-      //var test = results;
-      //console.log(test[0].advertising.manufacturerData);
-      // console.log(results[0].advertising);
-      // var localperipherals = peripherals;
-      // for (var i = 0; i < results.length; i++) {
-      //   var peripheral = results[i];
-      //   peripheral.connected = true;
-      //   localperipherals.set(peripheral.id, peripheral);
-      //   setPeripherals(localperipherals);
-      // }
-    // });
+    console.log("connected");
     setConnecting(true);
   }
 
@@ -125,10 +113,10 @@ export default function ListPage({navigation, route}){
     async function A(){
       await BleManager.scan([], 15, true).then((results) => { //7초이상 권장사항
         update(); 
-    });
-  }
-  A();
-  setScanning(true);
+      });
+    }
+    A();
+    setScanning(true);
   }
 
   //스캔한 값에 따라 동기적으로 데이터를 처리하기 위한 함수
@@ -213,40 +201,54 @@ export default function ListPage({navigation, route}){
       setPeripheralsID(InputPeripheralsID);
     } 
   }
+ const onRefresh =() =>{
+   setRefreshing(true);
+   reff();
+ }
 
+ const reff = () => {
+  BleManager.stopScan(); //스캔 스탑
+
+  updatePeripheralsID.forEach(function(e, i){ //디스커넥트 다 하기
+    BleManager.disconnect(e).then(console.log("디스커넥트", e));
+  })
+   
+  updatePeripherals.clear();//저장된거 비우기
+   setScanning(false);
+   setRefreshing(false);
+ }
   return (
     <>
     <StatusBar backgroundColor={'#DF7401'} barStyle="light-content"/> 
-    <SafeAreaView style={styles.wrap}>
-    <ScrollView style={styles.scroll}>
-            {
-              <View style={{flex:1, margin: 20}, styles.container}>
-                 <Text style={{textAlign: 'left',  
-                              width: Dimensions.get('window').height/15 * 0.7, 
-                              fontSize: Dimensions.get('window').width/100 * 5}}></Text>
-                <Text style={{textAlign: 'left',   
-                              width: Dimensions.get('window').height/5 * 0.88,
-                              fontSize: Dimensions.get('window').width/100 * 5,fontWeight: 'bold'}}>Status</Text>
-                <Text style={{textAlign: 'left', 
-                              width: Dimensions.get('window').height/5 * 0.7,
-                              fontSize: Dimensions.get('window').width/100 * 5,fontWeight: 'bold'}}>ID</Text>
-                <Text style={{textAlign: 'left', 
-                              width: Dimensions.get('window').height/5 * 0.7,
-                              fontSize: Dimensions.get('window').width/100 * 5,fontWeight: 'bold'}}>Cycle</Text>
-              </View>
-            }
-            {(list.length == 0) &&
-              <View style={{flex:1, margin: 20}}>
-                <Text style={{textAlign: 'center'}}>검색중</Text>
-              </View>
-            }
-        
-            <FlatList
-              data={list}
-              renderItem={({ item }) => <BatteryInfo Battery={item} navigation={navigation} /> }
-              keyExtractor={item => item.id.toString()}
+    <SafeAreaView style={styles.wrap}>      
+        <ScrollView
+          style={styles.scroll}
+          refreshControl={
+            <RefreshControl
+              onRefresh ={ () => onRefresh()}
+              refreshing ={ refreshing }
             />
-          </ScrollView>
+          }
+        >
+              {
+                <View style={styles.container}>
+                  <Text style={styles.test}>Status</Text>
+                  <Text style={styles.test}>ID</Text>
+                  <Text style={styles.test}>Cycle</Text>
+                </View>
+              }
+              {(list.length == 0) &&
+                <View style={{flex:1, margin: 20}}>
+                  <Text style={{textAlign: 'center'}}>검색중</Text>
+                </View>
+              }
+          
+              <FlatList
+                data={list}
+                renderItem={({ item }) => <BatteryInfo Battery={item} navigation={navigation} /> }
+                keyExtractor={item => item.id.toString()}
+              />
+        </ScrollView>
     </SafeAreaView>
     </> 
   );
@@ -272,5 +274,12 @@ const styles = StyleSheet.create({
     flex:0,
     flexDirection:'row',
     backgroundColor: '#FE9A2E',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
+  test:{
+    fontSize: 18,
+    fontWeight: 'bold',
+    margin: 3
+  }
 });
