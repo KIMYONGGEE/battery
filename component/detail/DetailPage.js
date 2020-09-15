@@ -137,10 +137,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  Top: {
-    flex: size/72,
-    backgroundColor: '#DF7401',
-  },
   Header: {
     alignItems: 'center',
     justifyContent: 'center',
