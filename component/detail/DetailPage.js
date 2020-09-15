@@ -25,6 +25,8 @@ export default function DetailPage({navigation, route}) {
 
   //var imgpath ='';
   var chargestatus = route.params.Battery[2];
+  var batteryId = route.params.Battery[3];
+  var batteryServiceUUIDs = route.params.Battery[4];
   //if(chargestatus == 0) imgpath = '../../assets/main/detailcharging.png';
 
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function DetailPage({navigation, route}) {
 
     const handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );
 
-    BleManager.connect("EA:C3:D8:6B:AF:71")
+    BleManager.connect(batteryId)
     .then(() => {
       // Success code
       retrieveConnected();
@@ -49,7 +51,7 @@ export default function DetailPage({navigation, route}) {
     //끝날때 disconnect
     return () => {
       handlerUpdate.remove();  
-      BleManager.disconnect("EA:C3:D8:6B:AF:71")
+      BleManager.disconnect(batteryId)
       .then(() => {
         // Success code
         // console.log("Disconnected");
@@ -62,31 +64,37 @@ export default function DetailPage({navigation, route}) {
   });
 
   const retrieveConnected= () => {
-    BleManager.getConnectedPeripherals(["6e400001-b5a3-f393-e0a9-e50e24dcca9e"]).then((results) => {
+    var notichar;
+    var serviceUUID = batteryServiceUUIDs[0];
+    var writechar;
+
+    BleManager.getConnectedPeripherals(batteryServiceUUIDs).then((results) => {
       if (results.length == 0) {
         console.log('No connected peripherals');
       }
-      var test = results;
-      //console.log(test[0].advertising.manufacturerData);
-      // for(var i = 0; i < results.length; i++){
-      //   console.log("result",i, " = ", results[i].advertising);
-        
-      // }
 
       setTimeout(() =>{
-        BleManager.retrieveServices("EA:C3:D8:6B:AF:71").then((peripheralInfo) => {
-          console.log("Peripheral info:", peripheralInfo.characteristics[5]);
+        BleManager.retrieveServices(batteryId).then((peripheralInfo) => {
+          console.log("Peripheral info:", peripheralInfo.characteristics);
 
-          var notichar = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
-          var peripheralId = "EA:C3:D8:6B:AF:71";
-          var serviceId = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-          var writechar = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+          for(var i = 0; i < peripheralInfo.characteristics.length; i++){
+            if(peripheralInfo.characteristics[i].service === serviceUUID){
+              if(peripheralInfo.characteristics[i].properties.Write === "Write"){
+                writechar = peripheralInfo.characteristics[i].characteristic;
+              } else if(peripheralInfo.characteristics[i].properties.Notify === "Notify"){
+                notichar = peripheralInfo.characteristics[i].characteristic;
+              }
+            }
+          }
+
+          // notichar = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+          // writechar = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 
           setTimeout(() =>{
-            BleManager.startNotification(peripheralId, serviceId, notichar).then(() =>{
+            BleManager.startNotification(batteryId, serviceUUID, notichar).then(() =>{
               console.log("start notification");
 
-              BleManager.write(peripheralId, serviceId, writechar, notidata).then(() =>{
+              BleManager.write(batteryId, serviceUUID, writechar, notidata).then(() =>{
                 console.log("write complete = ", notidata);
               }).catch((error)=>{
                 console.log("write error = ", error);

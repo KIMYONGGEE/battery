@@ -188,7 +188,7 @@ export default function ListPage({navigation, route}){
       var check=0;
 
       console.log(peripheral.id);
-      //console.log('Got ble peripheral', peripheral.advertising.manufacturerData.bytes);
+      console.log('Got ble peripheral', peripheral);
 
       if (!peripheral.name) {
         peripheral.name = 'NO NAME';

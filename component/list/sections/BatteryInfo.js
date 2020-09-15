@@ -6,23 +6,27 @@ import ChargingBar from './ChargingBar';
 export default function BatteryInfo({Battery, navigation}){
 
 const [fillingamount, SetFillingmount] = useState();
-const [id, SetId] = useState();
+const [serialnum, SetSerialnum] = useState();
 const [cyclecount, SetCyclecount] = useState();
 const [chargestate, SetChargestate] = useState();
 const [batteryerr, SetBatteryerr] = useState();
+const [id, SetId] = useState();
+const [serviceUUIDs, SetServiceUUIDs] = useState();
     
 useEffect(()=> {
 
   SetFillingmount(Battery.advertising.manufacturerData.bytes[12]);
-  SetId(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
+  SetSerialnum(Battery.advertising.manufacturerData.bytes[9] + Battery.advertising.manufacturerData.bytes[10] * 16 + Battery.advertising.manufacturerData.bytes[11] * 256);
   SetCyclecount(Battery.advertising.manufacturerData.bytes[14] + Battery.advertising.manufacturerData.bytes[15] * 16);
   SetBatteryerr(Battery.advertising.manufacturerData.bytes[16]);
   SetChargestate(Battery.advertising.manufacturerData.bytes[17]);
+  SetId(Battery.id);
+  SetServiceUUIDs(Battery.advertising.serviceUUIDs);
 
 });
 
 return (
-  <TouchableOpacity onPress={() => navigation.navigate('Detail',{Battery : [id, fillingamount, chargestate]})}>
+  <TouchableOpacity onPress={() => navigation.navigate('Detail',{Battery : [serialnum, fillingamount, chargestate, id, serviceUUIDs]})}>
    <View style={styles.List}>
     <View style={styles.ListView}>
       <Text style={styles.BatteryBar}>
@@ -31,7 +35,7 @@ return (
     </View>
     <View style={styles.ListView}>
       <Text style={styles.ListText}>
-        {id}
+        {serialnum}
       </Text>
     </View>
     <View style={styles.ListView}>
