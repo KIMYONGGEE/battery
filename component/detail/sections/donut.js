@@ -27,7 +27,7 @@ useEffect(()=> {
   else if(Charge <= 90 )SetColor("#00FF1A");
   else if(Charge <= 100 )SetColor("#00FF73");
   
-  if(SG==0 || PF==0) {
+  if(SG==0 && PF==0) {
       setImagepath(require('../../../assets/main/null.png'));
       if(Chargestatus == 1) {
         setImagepath(require('../../../assets/main/c0.png'));
@@ -50,7 +50,7 @@ console.log(Chargestatus);
         backgroundColor="#ffffff">
         {
             (fill) => (
-            <Text style={{fontSize: size*14,color:'#ffffff'}}>
+            <Text style={{fontSize: size*14,color:'#FBF5EF'}}>
               <Image style={{height:size*13,width:size*27.8}} source={imgpath}/>
               {charging} 
             </Text>
