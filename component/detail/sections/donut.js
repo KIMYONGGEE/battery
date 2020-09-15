@@ -42,16 +42,16 @@ console.log(Chargestatus);
 
   return (
     <AnimatedCircularProgress
-        size={size*80}
-        width={size*8}
+        size={size*60}
+        width={size*6}
         fill={Charge} 
         rotation={0}
         tintColor={color}
-        backgroundColor="#ffffff">
+        backgroundColor="#f0f2f1">
         {
             (fill) => (
-            <Text style={{fontSize: size*14,color:'#FBF5EF'}}>
-              <Image style={{height:size*13,width:size*27.8}} source={imgpath}/>
+            <Text style={{fontSize: size*11,color:'#000000'}}>
+              {/* <Image style={{height:size*13,width:size*27.8}} source={imgpath}/> */}
               {charging} 
             </Text>
             )

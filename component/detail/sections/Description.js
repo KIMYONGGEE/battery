@@ -2,11 +2,12 @@ import React,{ useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity,
         Dimensions } from 'react-native';
 
+var size = Dimensions.get('window').width/100;
+
 function Description({ navigation, Battery, Data}) {
 
   const [color, SetColor] = useState('');
 
-  var size = Dimensions.get('window').width/100;
   var voltage = (Data[2] + (Data[3]*256))/1000; // 단위 v
   var cyclecount = Data[4] + (Data[5]*256); // 회 
   var ttf = Data[6] + (Data[7]*256); // 분 
@@ -78,51 +79,51 @@ function Description({ navigation, Battery, Data}) {
   return (
     <>
       <View style={styles.Data}>
-        <View style={styles.Dataempty}></View>
-        <View style={styles.DatadescriptionHead}></View>
-        <View style={styles.Datadescription}>
+        {/* <View style={styles.Dataempty}></View>
+        <View style={styles.DatadescriptionHead}></View> */}
+        {/* <View style={styles.Datadescription}>
           <Text style={{fontSize: size*4.5,}}></Text>
           <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#424242'}}></Text>
+        </View> */}
+        <View style={styles.Datadescription}>
+          <Text style={styles.DataTitle}>VOLTAGE</Text>
+          <Text style={styles.DataContents}>{voltage} V</Text>
         </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#A4A4A4'}}>VOLTAGE</Text>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#424242'}}>{voltage} V</Text>
+          <Text style={styles.DataTitle}>CYCLE COUNT</Text>
+          <Text style={styles.DataContents}>{cyclecount} Cycle</Text>
         </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>CYCLE COUNT</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{cyclecount} Cycle</Text>
-          </View>
+          <Text style={styles.DataTitle}>Time to Full</Text>
+          <Text style={styles.DataContents}>{ttf} min</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>Time to Full</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{ttf} min</Text>
-          </View>
+          <Text style={styles.DataTitle}>Time to Empty</Text>
+          <Text style={styles.DataContents}>{tte} min</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>Time to Empty</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{tte} min</Text>
-           </View>
+          <Text style={styles.DataTitle}>TEMP</Text>
+          <Text style={styles.DataContents}>{temperature} °C</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#A4A4A4'}}>TEMP</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{temperature} °C</Text>
-          </View>
+          <Text style={styles.DataTitle}>SOH</Text>
+          <Text style={styles.DataContents}>{soh} %</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold' , color:'#A4A4A4'}}>SOH</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{soh} %</Text>
-           </View>
-        <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>STATUS</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{statu}</Text>
-          </View>
-        <View style={styles.Datadescription}>  
+          <Text style={styles.DataTitle}>STATUS</Text>
+          <Text style={styles.DataContents}>{statu}</Text>
+        </View>
+        {/* <View style={styles.Datadescription}>  
           <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'#A4A4A4'}}>LEVEL1 ERROR</Text>
           <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'red'}}>{LEV1ERROR}</Text>
-          </View>
+        </View>
         <View style={styles.Datadescription}>
           <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'#A4A4A4'}}>LEVEL2 ERROR</Text>
           <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'red'}}>{LEV2ERROR}</Text>
-          </View>
+        </View> */}
       </View>
 
-      <View style={styles.Navempty}></View>
+      {/* <View style={styles.Navempty}></View> */}
       <View style={styles.Nav}>
         <View style={styles.Navbtn}>
           <Button
@@ -132,8 +133,8 @@ function Description({ navigation, Battery, Data}) {
             onPress={()=>Alert.alert('Send Data to Battery')}
           />
         </View>
-
       </View>
+
       <View style={styles.Navempty}></View>
     </>
   );
@@ -142,7 +143,7 @@ function Description({ navigation, Battery, Data}) {
 const styles = StyleSheet.create({
   Data:{
 
-    flex: 1,
+    flex: size/4,
     backgroundColor: '#FBF5EF',
   },
   Dataempty:{
@@ -152,10 +153,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 9.5,
-    paddingLeft: 60,
-    paddingRight: 60,
-    flex: 1,
+    padding: size * 5.5,
+    // paddingLeft: 60,
+    // paddingRight: 60,
+    flex: size/40,
+    borderBottomWidth: 0.2,
+    textAlign: 'center',
+    // marginTop: 50,
+    // marginBottom: 50,
   },
   information:{
     flexDirection: 'row',
@@ -196,10 +201,20 @@ const styles = StyleSheet.create({
   },
   Navempty: {
     backgroundColor: '#FBF5EF',
-    flex: 0.2,
+    flex: 0.1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  DataTitle: {
+    fontSize: size*4.5, 
+    fontWeight: 'bold',
+    color:'#A4A4A4',
+  },
+  DataContents: {
+    fontSize: size*4.5, 
+    fontWeight: 'bold',
+    color:'#424242',
+  }
 });
 
 export default Description;

@@ -13,6 +13,7 @@ const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
 var size = Dimensions.get('window').width/100;
+
 var stateimage ='';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -116,17 +117,26 @@ export default function DetailPage({navigation, route}) {
 
   return (
     <>
-      <View style={styles.Top} />
-      <View style={styles.Header}>
-        <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} Data={data}></Chart>
+      {/* <View style={styles.Top} /> */}
+      <View style={styles.container}>
+        <View style={styles.Header}>
+          <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} Data={data}></Chart>
+        </View>
+        <View style={styles.Bott}>
+          <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
+        </View>
       </View>
-      <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
+      
     </>
   );
 }
 
 
 const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: "100%",
+  },
   Top: {
     flex: size/72,
     backgroundColor: '#DF7401',
@@ -134,8 +144,15 @@ const styles = StyleSheet.create({
   Header: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: size/2.4,
-    backgroundColor: '#DF7401',
+    width: "100%",
+    height: "40%",
+    // flex: size/6,
+    backgroundColor: '#ffffff',
+  },
+  Bott: {
+    width: "100%",
+    height: "60%",
+    // flex: size/4,
   },
   image: {
     width:100,
