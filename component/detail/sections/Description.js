@@ -81,9 +81,6 @@ function Description({ navigation, Battery, Data}) {
         <View style={styles.Dataempty}></View>
         <View style={styles.DatadescriptionHead}></View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*6, fontWeight: 'bold', }}>INFROMATION</Text>
-          </View>
-        <View style={styles.Datadescription}>
           <Text style={{fontSize: size*4.5,}}></Text>
           <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#424242'}}></Text>
         </View>
@@ -155,14 +152,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 9.5,
+    paddingLeft: 60,
+    paddingRight: 60,
+    flex: 1,
+  },
+  information:{
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 10,
+
     flex: 1,
   },
   DatadescriptionHead:{
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 4.8,
+
     flex: 1,
   },
   Dataval:{
