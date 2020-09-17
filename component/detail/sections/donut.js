@@ -29,7 +29,7 @@ useEffect(()=> {
   
   if(SG==0 && PF==0) {
       setImagepath(require('../../../assets/main/null.png'));
-      if(Chargestatus == 1) {
+      if(Chargestatus == 0) {
         setImagepath(require('../../../assets/main/c0.png'));
       }
   }
