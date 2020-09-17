@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderBottomWidth: 1,
-    backgroundColor: '#FBF5EF',
+    backgroundColor: '#353535',
   },
   ListView: {
     textAlign: 'center',
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     marginTop : Dimensions.get('window').height/9 * 0.7,
     alignItems: 'center',
     fontSize: Dimensions.get('window').width/100 * 4.5,
-    height: Dimensions.get('window').height/9
+    height: Dimensions.get('window').height/9,
+    color: '#ffffff',
   },
 });

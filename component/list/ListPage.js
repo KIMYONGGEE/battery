@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, NativeEventEmitter, NativeModules, Platform,
-         PermissionsAndroid, AppState, FlatList, Dimensions, Button, SafeAreaView, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, NativeEventEmitter, NativeModules, Platform,
+         PermissionsAndroid, AppState, FlatList, Dimensions, SafeAreaView, RefreshControl } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -170,7 +170,7 @@ export default function ListPage({navigation, route}){
           checkShit++;
         }
       }
-    if(checkShit === 7){
+    if(checkShit === 0){
       var localperipherals = peripherals;
       var InputPeripheralsID = peripheralsID;
       var check=0;
@@ -219,8 +219,8 @@ export default function ListPage({navigation, route}){
  }
   return (
     <>
-    <StatusBar backgroundColor={'#DF7401'} barStyle="light-content"/> 
-    <SafeAreaView style={styles.wrap}>      
+    <StatusBar backgroundColor={'#212121'} color={'#ffffff'} barStyle="night-content"/> 
+    <SafeAreaView>      
         <ScrollView
           style={styles.scroll}
           refreshControl={
@@ -230,24 +230,23 @@ export default function ListPage({navigation, route}){
             />
           }
         >
-              {
-                <View style={styles.container}>
-                  <Text style={styles.test}>Status</Text>
-                  <Text style={styles.test}>ID</Text>
-                  <Text style={styles.test}>Cycle</Text>
-                </View>
-              }
-              {(list.length == 0) &&
-                <View style={{flex:1, margin: 20}}>
-                  <Text style={{textAlign: 'center'}}>검색중</Text>
-                </View>
-              }
-          
-              <FlatList
-                data={list}
-                renderItem={({ item }) => <BatteryInfo Battery={item} navigation={navigation} /> }
-                keyExtractor={item => item.id.toString()}
-              />
+        {
+          <View style={styles.container}>
+            <Text style={styles.title}>Status</Text>
+            <Text style={styles.title}>ID</Text>
+            <Text style={styles.title}>Cycle</Text>
+          </View>
+        }
+        {(list.length == 0) &&
+          <View style={{flex:1, margin: 20}}>
+            <Text style={{textAlign: 'center', color: '#ffffff'}}>검색중</Text>
+          </View>
+        }
+        <FlatList
+          data={list}
+          renderItem={({ item }) => <BatteryInfo Battery={item} navigation={navigation} /> }
+          keyExtractor={item => item.id.toString()}
+        />
         </ScrollView>
     </SafeAreaView>
     </> 
@@ -268,18 +267,20 @@ const styles = StyleSheet.create({
   },
   scroll:{
     height: "100%",
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#212121',
   },
   container:{
-    flex:0,
     flexDirection:'row',
-    backgroundColor: '#FE9A2E',
+    backgroundColor: '#DF7401',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    paddingBottom: 4,
+    paddingTop: 4
   },
-  test:{
+  title:{
     fontSize: 18,
     fontWeight: 'bold',
-    margin: 3
+    margin: 3,
+    color: '#ffffff'
   }
 });

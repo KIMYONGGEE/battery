@@ -1,7 +1,6 @@
 import React,{ useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity,
-        Dimensions } from 'react-native';
-import { color } from 'react-native-reanimated';
+import { StyleSheet, Text, View, Button, Alert, Dimensions } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 var size = Dimensions.get('window').width/100;
 // var statuscolor = '#088A29';
@@ -57,6 +56,7 @@ function Description({ navigation, Battery, Data}) {
 
   return (
     <>
+      <StatusBar backgroundColor={'#DF7401'} color={'#ffffff'} barStyle="night-content"/> 
       <View style={styles.Data}>
         <View style={styles.Datadescription}>
           <Text style={styles.DataTitle}>VOLTAGE</Text>
@@ -93,7 +93,6 @@ function Description({ navigation, Battery, Data}) {
           <Button
             color="#DF7401"
             title="C h e c k"
-            fontSize =""
             onPress={()=>Alert.alert('Send Data to Battery')}
           />
         </View>
@@ -108,10 +107,10 @@ function Description({ navigation, Battery, Data}) {
 const styles = StyleSheet.create({
   Data:{
     borderTopWidth: 10,
-    borderTopColor: '#e4e6e5',
+    borderTopColor: '#5D5D5D',
     width: "100%",
     height: '80%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#212121',
   },
   Datadescription:{
     flexDirection: 'row',
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
     // marginBottom: 50,
   },
   Nav:{
-    backgroundColor: '#ffffff',
+    backgroundColor: '#212121',
     alignItems: 'center',
     justifyContent: 'space-around',
     height: '20%',
