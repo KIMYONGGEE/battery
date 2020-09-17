@@ -28,12 +28,15 @@ useEffect(()=> {
   else if(Charge <= 100 )SetColor("#00FF73");
   
   if(SG==0 && PF==0) {
-      setImagepath(require('../../../assets/main/null.png'));
+      //setImagepath(require('../../../assets/main/null.png'));
+      var charging = "\n"+Charge +"%\n";
       if(Chargestatus == 0) {
-        setImagepath(require('../../../assets/main/c0.png'));
+        //setImagepath(require('../../../assets/main/c0.png'));
+        var charging = "\n"+Charge +"%\nCharging..";
       }
   }
-  if(SG!=0 || PF!=0) setImagepath(require('../../../assets/main/e100.png'));
+  if(SG!=0 || PF!=0) var charging = "\n"+Charge +"%\nERROR!";
+  //setImagepath(require('../../../assets/main/e100.png'));
 
 });
 
