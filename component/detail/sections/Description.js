@@ -1,128 +1,93 @@
 import React,{ useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Alert, Image, TouchableOpacity,
         Dimensions } from 'react-native';
+import { color } from 'react-native-reanimated';
+
+var size = Dimensions.get('window').width/100;
+// var statuscolor = '#088A29';
 
 function Description({ navigation, Battery, Data}) {
 
-  const [color, SetColor] = useState('');
+  const [statuscolor, SetColor] = useState('#000000');
 
-  var size = Dimensions.get('window').width/100;
   var voltage = (Data[2] + (Data[3]*256))/1000; // 단위 v
   var cyclecount = Data[4] + (Data[5]*256); // 회 
   var ttf = Data[6] + (Data[7]*256); // 분 
   var tte = Data[8] + (Data[9]*256); // 분 
-  var temperature = (Data[10] + (Data[11]*256))/10 + 273.15  // 셀시어스   
+  var temperature = (Data[10] + (Data[11]*256))/10 + 273.15;  // 셀시어스   
   var soh = Data[12]; // %? hex? Ten?
   var SG = Data[13];
   var PF = Data[14];
-  var CNR = Data[15];;
+  var CNR = Data[15];
   var charging = Data[16];//0 or 1 
 
   var LEV2ERROR ="";
   var LEV1ERROR ="";
-  var statu="NORMAL";
-  
-
- /* const [voltage, SetVoltage] = useState();
-  const [cyclecount, SetCyclecount] = useState();
-  const [ttf, SetTTF] = useState();
-  const [tte, SetTTE] = useState();
-  const [temperature, SetTemperature] = useState(); 
-  const [soh, SetSOH] = useState();
-  const [status, SetStatus] = useState();
-  const [cnr, SetCNR] = useState();
-  const [chargestate, SetChargestate] = useState();
- 
-  useEffect(()=> {
-
-    SetVoltage(Data.bytes[2] + Data.bytes[3] * 16);
-    SetCyclecount(Data.bytes[4] + Data.bytes[5] * 16);
-    SetTTF(Data.bytes[6] + Data.bytes[7] * 16);
-    SetTTE(Data.bytes[8] + Data.bytes[9] * 16);
-    SetTemperature(Data.bytes[10] + Data.bytes[11] * 16);
-    SetSOH(Data.bytes[12]);
-    //SetStatus(Battery.advertising.manufacturerData.bytes[17]);
-
-  
-  });*/  
+  var status="O.K";
   console.log("충전" + SG);
 
   useEffect(()=> {
-    if(statu =="NORMAL") SetColor('#088A29');
-  
+    if(status =="O.K") SetColor('#088A29');
+
+    //Level 2 ERROR(SG) :
+    if(SG!=0){ 
+      if(SG==1) status = "LOW BAT";
+      else if(SG==2) status = "O.T.D";
+      else if(SG==3) status = "O.T.C";
+      else if(SG==4) status = "U.T.C";
+      else if(SG==5) status = "O.V";
+      else if(SG==6) status = "O.C.D";
+      else if(SG==7) status = "O.C.C";
+      else if(SG==8) status = "O.T.I";
+      else status = "Level 2 Error";
+    }
+
+    // Level 1 ERROR(PF) : 
+    if(PF!=0){
+      if(PF==1) status = "PF STATUS VALUE";
+      else if(PF==2) status = "C.F";
+      else if(PF==3) status = "L.V";
+      else status = "Level 1 error";
+    }
+
+    if(SG == 0 && PF == 0){
+      status = "O.K";
+    }
   });
-
-  //Level 2 ERROR(SG) :
-  if(SG!=0){ 
-    statu = "ERROR!";
-    if(SG==1) LEV2ERROR = "LOW BAT";
-    else if(SG==2) LEV2ERROR = "O.T.D";
-    else if(SG==3) LEV2ERROR = "O.T.C";
-    else if(SG==4) LEV2ERROR = "U.T.C";
-    else if(SG==5) LEV2ERROR = "O.V";
-    else if(SG==6) LEV2ERROR = "O.C.D";
-    else if(SG==7) LEV2ERROR = "O.C.C";
-    else if(SG==8) LEV2ERROR = "O.T.I";
-    else LEV2ERROR = ""
-  }
-
-  // Level 1 ERROR(PF) : 
-  if(PF!=0){
-    statu = "ERROR!";
-    if(PF==1) LEV1ERROR = "PF STATUS VALUE";
-    else if(PF==2) LEV1ERROR = "C.F";
-    else if(PF==3) LEV1ERROR = "L.V";
-    else LEV1ERROR = ""
-  }
 
   return (
     <>
       <View style={styles.Data}>
-        <View style={styles.Dataempty}></View>
-        <View style={styles.DatadescriptionHead}></View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5,}}></Text>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#424242'}}></Text>
+          <Text style={styles.DataTitle}>VOLTAGE</Text>
+          <Text style={styles.DataContents}>{voltage} V</Text>
         </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#A4A4A4'}}>VOLTAGE</Text>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#424242'}}>{voltage} V</Text>
+          <Text style={styles.DataTitle}>CYCLE COUNT</Text>
+          <Text style={styles.DataContents}>{cyclecount} Cycle</Text>
         </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>CYCLE COUNT</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{cyclecount} Cycle</Text>
-          </View>
+          <Text style={styles.DataTitle}>Time to Full</Text>
+          <Text style={styles.DataContents}>{ttf} min</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>Time to Full</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{ttf} min</Text>
-          </View>
+          <Text style={styles.DataTitle}>Time to Empty</Text>
+          <Text style={styles.DataContents}>{tte} min</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>Time to Empty</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{tte} min</Text>
-           </View>
+          <Text style={styles.DataTitle}>TEMP</Text>
+          <Text style={styles.DataContents}>{temperature} °C</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:'#A4A4A4'}}>TEMP</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{temperature} °C</Text>
-          </View>
+          <Text style={styles.DataTitle}>SOH</Text>
+          <Text style={styles.DataContents}>{soh} %</Text>
+        </View>
         <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold' , color:'#A4A4A4'}}>SOH</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{soh} %</Text>
-           </View>
-        <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold', color:'#A4A4A4'}}>STATUS</Text>
-          <Text style={{fontSize: size*4.5, fontWeight: 'bold',color:'#424242'}}>{statu}</Text>
-          </View>
-        <View style={styles.Datadescription}>  
-          <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'#A4A4A4'}}>LEVEL1 ERROR</Text>
-          <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'red'}}>{LEV1ERROR}</Text>
-          </View>
-        <View style={styles.Datadescription}>
-          <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'#A4A4A4'}}>LEVEL2 ERROR</Text>
-          <Text style={{fontSize: size*3.5, fontWeight: 'bold', color:'red'}}>{LEV2ERROR}</Text>
-          </View>
+          <Text style={styles.DataTitle}>STATUS</Text>
+          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:statuscolor}}>{status}</Text>
+        </View>
       </View>
 
-      <View style={styles.Navempty}></View>
       <View style={styles.Nav}>
         <View style={styles.Navbtn}>
           <Button
@@ -132,58 +97,47 @@ function Description({ navigation, Battery, Data}) {
             onPress={()=>Alert.alert('Send Data to Battery')}
           />
         </View>
-
+        
       </View>
-      <View style={styles.Navempty}></View>
+
+      
     </>
   );
 }
 
 const styles = StyleSheet.create({
   Data:{
-
-    flex: 1,
-    backgroundColor: '#FBF5EF',
-  },
-  Dataempty:{
-    flex: 0.5,
+    borderTopWidth: 10,
+    borderTopColor: '#e4e6e5',
+    width: "100%",
+    height: '80%',
+    backgroundColor: '#ffffff',
   },
   Datadescription:{
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 9.5,
-    paddingLeft: 60,
-    paddingRight: 60,
-    flex: 1,
-  },
-  information:{
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 10,
-
-    flex: 1,
-  },
-  DatadescriptionHead:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 4.8,
-
-    flex: 1,
-  },
-  Dataval:{
-    flex: 1,
+    padding: size * 5.5,
+    paddingLeft: size * 10,
+    paddingRight: size * 10,
+    width: '100%',
+    height: '14.2857%',
+    borderBottomWidth: 0.2,
+    textAlign: 'center',
+    // marginTop: 50,
+    // marginBottom: 50,
   },
   Nav:{
-    backgroundColor: '#FBF5EF',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'space-around',
-    flex: 0.2,
+    height: '20%',
+    width: '100%',
     flexDirection: 'row',
   },
   Navbtn:{
-    flex: 0.5,
+    width: '60%',
+    height: '50%',
   },
   Navlist:{
     justifyContent: 'center',
@@ -195,11 +149,26 @@ const styles = StyleSheet.create({
     height: 45,
   },
   Navempty: {
-    backgroundColor: '#FBF5EF',
-    flex: 0.2,
+    backgroundColor: '#ffffff',
+    flex: 0.1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  DataTitle: {
+    fontSize: size*4.5, 
+    fontWeight: 'bold',
+    color:'#A4A4A4',
+  },
+  DataContents: {
+    fontSize: size*4.5, 
+    fontWeight: 'bold',
+    color:'#424242',
+  },
+  DataStatus:{
+    fontSize: size*4.5, 
+    fontWeight: 'bold',
+    // color: statuscolor,
+  }
 });
 
 export default Description;
