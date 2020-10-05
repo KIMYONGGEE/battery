@@ -12,6 +12,9 @@ const [chargestate, SetChargestate] = useState();
 const [batteryerr, SetBatteryerr] = useState();
 const [id, SetId] = useState();
 const [serviceUUIDs, SetServiceUUIDs] = useState();
+const [serialstr, SetSerialstr] = useState("");
+
+var titled = "";
     
 useEffect(()=> {
 
@@ -22,6 +25,18 @@ useEffect(()=> {
   SetChargestate(Battery.advertising.manufacturerData.bytes[17]);
   SetId(Battery.id);
   SetServiceUUIDs(Battery.advertising.serviceUUIDs);
+
+
+
+  if(typeof(serialnum) === 'number'){
+    var tmp = serialnum.toString();
+    // var serialstr = serialnum.toString();
+
+    for(var i = 0; i < 8-tmp.length; i++) titled += "0";
+
+    titled += serialnum;
+    SetSerialstr(titled);
+  }
 
 });
 
@@ -35,7 +50,7 @@ return (
     </View>
     <View style={styles.ListView}>
       <Text style={styles.ListText}>
-        {serialnum}
+        {serialstr}
       </Text>
     </View>
     <View style={styles.ListView}>

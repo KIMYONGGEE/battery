@@ -7,7 +7,7 @@ var size = Dimensions.get('window').width/100;
 
 function Description({ navigation, Battery, Data}) {
 
-  const [statuscolor, SetColor] = useState('#000000');
+  const [statuscolor, SetColor] = useState('#00ff00');
 
   var voltage = (Data[2] + (Data[3]*256))/1000; // 단위 v
   var cyclecount = Data[4] + (Data[5]*256); // 회 
@@ -26,7 +26,7 @@ function Description({ navigation, Battery, Data}) {
   console.log("충전" + SG);
 
   useEffect(()=> {
-    if(status =="O.K") SetColor('#088A29');
+    if(status =="O.K") SetColor('#00ff00');
 
     //Level 2 ERROR(SG) :
     if(SG!=0){ 
@@ -56,7 +56,6 @@ function Description({ navigation, Battery, Data}) {
 
   return (
     <>
-      <StatusBar backgroundColor={'#DF7401'} color={'#ffffff'} barStyle="night-content"/> 
       <View style={styles.Data}>
         <View style={styles.Datadescription}>
           <Text style={styles.DataTitle}>VOLTAGE</Text>
@@ -82,7 +81,7 @@ function Description({ navigation, Battery, Data}) {
           <Text style={styles.DataTitle}>SOH</Text>
           <Text style={styles.DataContents}>{soh} %</Text>
         </View>
-        <View style={styles.Datadescription}>
+        <View style={styles.StatusDescription}>
           <Text style={styles.DataTitle}>STATUS</Text>
           <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:statuscolor}}>{status}</Text>
         </View>
@@ -106,14 +105,15 @@ function Description({ navigation, Battery, Data}) {
 
 const styles = StyleSheet.create({
   Data:{
-    borderTopWidth: 10,
-    borderTopColor: '#5D5D5D',
+    borderTopWidth: 2,
+    borderTopColor: '#e3e3e3',
     width: "100%",
     height: '80%',
     backgroundColor: '#212121',
   },
   Datadescription:{
     flexDirection: 'row',
+    backgroundColor: "#353535",
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: size * 5.5,
@@ -122,12 +122,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '14.2857%',
     borderBottomWidth: 0.2,
+    borderBottomColor: '#e3e3e3',
     textAlign: 'center',
     // marginTop: 50,
     // marginBottom: 50,
   },
   Nav:{
-    backgroundColor: '#212121',
+    backgroundColor: '#353535',
     alignItems: 'center',
     justifyContent: 'space-around',
     height: '20%',
@@ -156,18 +157,34 @@ const styles = StyleSheet.create({
   DataTitle: {
     fontSize: size*4.5, 
     fontWeight: 'bold',
-    color:'#A4A4A4',
+    color:'#ffffff',
   },
   DataContents: {
     fontSize: size*4.5, 
     fontWeight: 'bold',
-    color:'#424242',
+    color:'#e3e3e3',
   },
   DataStatus:{
     fontSize: size*4.5, 
     fontWeight: 'bold',
     // color: statuscolor,
-  }
+  },
+  StatusDescription:{
+    flexDirection: 'row',
+    backgroundColor: "#353535",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: size * 5.5,
+    paddingLeft: size * 10,
+    paddingRight: size * 10,
+    width: '100%',
+    height: '14.2857%',
+    borderBottomWidth: 2,
+    borderBottomColor: '#e3e3e3',
+    textAlign: 'center',
+    // marginTop: 50,
+    // marginBottom: 50,
+  },
 });
 
 export default Description;

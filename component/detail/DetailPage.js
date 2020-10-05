@@ -31,10 +31,22 @@ export default function DetailPage({navigation, route}) {
   //if(chargestatus == 0) imgpath = '../../assets/main/detailcharging.png';
 
   useEffect(() => {
-    if(route.params.Battery[0]<10)
-      navigation.setOptions({ title: "[ 000" + route.params.Battery[0] + " ] Description" });
-    else
-      navigation.setOptions({ title: "[ 00" + route.params.Battery[0] + " ] Description" });
+    var serialnum = route.params.Battery[0].toString();
+    // var serialnum = "12345";
+    console.log(typeof(serialnum), serialnum);
+    var titled = "S/N : ";
+
+    for(var i = 0; i < 8-serialnum.length; i++) titled += "0";
+
+    titled += serialnum;
+    navigation.setOptions({ title: titled });
+
+    // if(route.params.Battery[0]<10){
+    //   navigation.setOptions({ title: titled });
+    // }
+    // else{
+    //   navigation.setOptions({ title: titled });
+    // }
     //3자리, 4자리도 더 만들기
 
     const handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );
@@ -142,7 +154,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "40%",
     // flex: size/6,
-    backgroundColor: '#212121',
+    backgroundColor: '#353535',
   },
   Bott: {
     width: "100%",

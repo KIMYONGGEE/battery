@@ -170,7 +170,7 @@ export default function ListPage({navigation, route}){
           checkShit++;
         }
       }
-    if(checkShit === 0){
+    if(checkShit === 7){
       var localperipherals = peripherals;
       var InputPeripheralsID = peripheralsID;
       var check=0;
@@ -233,7 +233,7 @@ export default function ListPage({navigation, route}){
         {
           <View style={styles.container}>
             <Text style={styles.title}>Status</Text>
-            <Text style={styles.title}>ID</Text>
+            <Text style={styles.title}>S/N</Text>
             <Text style={styles.title}>Cycle</Text>
           </View>
         }
