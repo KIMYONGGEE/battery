@@ -31,11 +31,14 @@ export default function ListPage({navigation, route}){
   const [test, setTest] = useState(false);
 
   const [appState, setAppState] = useState('');
+  const [listCnt, setListCnt] = useState(0);
   const list = Array.from(new Set(updatePeripherals.values()));
+
+  BleManager.start({showAlert: false});
 
   useEffect(() =>{
     AppState.addEventListener('change', handleAppStateChange);
-    BleManager.start({showAlert: false});
+    
     const handlerConnect = bleManagerEmitter.addListener('BleManagerConnectPeripheral', handleConnectedPeripheral );
     const handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral );
     const handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan );
@@ -74,7 +77,7 @@ export default function ListPage({navigation, route}){
       handlerStop.remove();
       handlerDisconnect.remove();
     };
-  }, [scanning, connecting, test]);
+  }, [scanning, connecting, listCnt]);
 
   const handleAppStateChange = (nextAppState)  => {
     if (appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -104,6 +107,7 @@ export default function ListPage({navigation, route}){
   }
 
   const handleStopScan =() => {
+    update();
     console.log('Scan is stopped');
     setScanning(false);
   }
@@ -111,8 +115,8 @@ export default function ListPage({navigation, route}){
   const startScan = () => {
     console.log("Scanning start");
     async function A(){
-      await BleManager.scan([], 15, true).then((results) => { //7초이상 권장사항
-        update(); 
+      await BleManager.scan([], 10, true).then((results) => { //7초이상 권장사항
+        
       });
     }
     A();
@@ -122,6 +126,8 @@ export default function ListPage({navigation, route}){
   //스캔한 값에 따라 동기적으로 데이터를 처리하기 위한 함수
   //새로 들어온 값이 기존에 있던 값에 존재하지 않으면 삭제한다 (ID로 비교)
   const update = () =>{
+    console.log("Update start");
+    // console.log("Update Start~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     let updateID = Array.from(new Set(peripheralsID)); //새로 들어온 peripheralsID를 저장하는 배열
     let existID = updatePeripheralsID;                 //기존에 있던 peripheralsID를 저장하는 배열
     let noneID = new Array();                          //비교해서 들어있지 않은 인덱스를 저장하는 배열
@@ -150,6 +156,8 @@ export default function ListPage({navigation, route}){
       //console.log("버릴 값            : " + noneID);
       for(var a = 0; a < noneID.length; a++){
         peripherals.delete(noneID[a]);
+        // setListCnt(listCnt - 1);
+        // console.log("Disount = ", listCnt);
       }     
     }
     
@@ -157,6 +165,7 @@ export default function ListPage({navigation, route}){
     setUpdatePeripherals(peripherals);
     setUpdatePeripheralsID(updateID);
     setPeripheralsID(new Array()); //스캔이 끝나면 비워서 새로운 값을 받을 수 있게 한다. 
+    console.log("Update finish");
   }
 
   //값을 받아오고 저장한다.
@@ -175,8 +184,8 @@ export default function ListPage({navigation, route}){
       var InputPeripheralsID = peripheralsID;
       var check=0;
 
-      console.log(peripheral.id);
-      console.log('Got ble peripheral', peripheral);
+      // console.log(peripheral.id);
+      // console.log('Got ble peripheral', peripheral);
 
       if (!peripheral.name) {
         peripheral.name = 'NO NAME';
@@ -185,15 +194,19 @@ export default function ListPage({navigation, route}){
       if(Array.from(peripherals.keys()).length == 0){ //초기값은 그냥 넣는다. 
         localperipherals.set(peripheral.id, peripheral);
         setPeripherals(localperipherals);
+        console.log("First found");
 
       }else{ //그 이후에는 비교하며 넣는다.
         Array.from(peripherals.keys()).forEach(function(item, index){
           if(item == peripheral.id)check++;
         });
           if(check == 0){
+          console.log("Another found");
           //SCAN하면서 peripherals에 데이터를 바로 저장한다. 
           localperipherals.set(peripheral.id, peripheral);
           setPeripherals(localperipherals);
+          // setListCnt(listCnt + 1);
+          // console.log("Count = ", updatePeripherals.size);
         }
       }
       //SCAN한 peripheral의 id 값을 저장한다.

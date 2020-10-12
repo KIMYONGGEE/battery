@@ -7,7 +7,7 @@ var size = Dimensions.get('window').width/100;
 
 function Description({ navigation, Battery, Data}) {
 
-  const [statuscolor, SetColor] = useState('#00ff00');
+  const [statuscolor, SetColor] = useState('#00FF73');
 
   var voltage = (Data[2] + (Data[3]*256))/1000; // 단위 v
   var cyclecount = Data[4] + (Data[5]*256); // 회 
@@ -26,10 +26,11 @@ function Description({ navigation, Battery, Data}) {
   console.log("충전" + SG);
 
   useEffect(()=> {
-    if(status =="O.K") SetColor('#00ff00');
+    if(status =="O.K") SetColor('#00FF73');
 
     //Level 2 ERROR(SG) :
     if(SG!=0){ 
+      SetColor("#FFB300");
       if(SG==1) status = "LOW BAT";
       else if(SG==2) status = "O.T.D";
       else if(SG==3) status = "O.T.C";
@@ -57,45 +58,54 @@ function Description({ navigation, Battery, Data}) {
   return (
     <>
       <View style={styles.Data}>
-        <View style={styles.Datadescription}>
-          <Text style={styles.DataTitle}>VOLTAGE</Text>
-          <Text style={styles.DataContents}>{voltage} V</Text>
-        </View>
-        <View style={styles.Datadescription}>
-          <Text style={styles.DataTitle}>CYCLE COUNT</Text>
-          <Text style={styles.DataContents}>{cyclecount} Cycle</Text>
-        </View>
-        <View style={styles.Datadescription}>
-          <Text style={styles.DataTitle}>Time to Full</Text>
-          <Text style={styles.DataContents}>{ttf} min</Text>
-        </View>
-        <View style={styles.Datadescription}>
-          <Text style={styles.DataTitle}>Time to Empty</Text>
-          <Text style={styles.DataContents}>{tte} min</Text>
-        </View>
-        <View style={styles.Datadescription}>
-          <Text style={styles.DataTitle}>TEMP</Text>
-          <Text style={styles.DataContents}>{temperature} °C</Text>
-        </View>
-        <View style={styles.Datadescription}>
-          <Text style={styles.DataTitle}>SOH</Text>
-          <Text style={styles.DataContents}>{soh} %</Text>
-        </View>
-        <View style={styles.StatusDescription}>
-          <Text style={styles.DataTitle}>STATUS</Text>
-          <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:statuscolor}}>{status}</Text>
-        </View>
-      </View>
 
-      <View style={styles.Nav}>
-        <View style={styles.Navbtn}>
-          <Button
-            color="#DF7401"
-            title="C h e c k"
-            onPress={()=>Alert.alert('Send Data to Battery')}
-          />
+        <View style={styles.BatteryInfo}>
+          <View style={styles.Datadescription}>
+            <Text style={styles.DataTitle}>VOLTAGE</Text>
+            <Text style={styles.DataContents}>{voltage} V</Text>
+          </View>
+          <View style={styles.Datadescription}>
+            <Text style={styles.DataTitle}>CYCLE COUNT</Text>
+            <Text style={styles.DataContents}>{cyclecount} Cycle</Text>
+          </View>
+          <View style={styles.DatadescriptionEnd}>
+            <Text style={styles.DataTitle}>TEMP</Text>
+            <Text style={styles.DataContents}>{temperature} °C</Text>
+          </View>
         </View>
-        
+
+        <View style={styles.BatteryData}>
+          <View style={styles.Datadescription}>
+            <Text style={styles.DataTitle}>Time to Full</Text>
+            <Text style={styles.DataContents}>{ttf} min</Text>
+          </View>
+          <View style={styles.DatadescriptionEnd}>
+            <Text style={styles.DataTitle}>Time to Empty</Text>
+            <Text style={styles.DataContents}>{tte} min</Text>
+          </View>
+        </View>
+
+        <View style={styles.BatteryData}>
+          <View style={styles.Datadescription}>
+            <Text style={styles.DataTitle}>SOH</Text>
+            <Text style={styles.DataContents}>{soh} %</Text>
+          </View>
+          <View style={styles.DatadescriptionEnd}>
+            <Text style={styles.DataTitle}>STATUS</Text>
+            <Text style={{fontSize: size*4.5,fontWeight: 'bold', color:statuscolor}}>{status}</Text>
+          </View>
+        </View>
+
+        <View style={styles.Nav}>
+          <View style={styles.Navbtn}>
+            <Button
+              color="#DF7401"
+              title="C h e c k"
+              onPress={()=>Alert.alert('Send Data to Battery')}
+            />
+          </View>
+        </View>
+
       </View>
 
       
@@ -105,54 +115,50 @@ function Description({ navigation, Battery, Data}) {
 
 const styles = StyleSheet.create({
   Data:{
-    borderTopWidth: 2,
-    borderTopColor: '#e3e3e3',
     width: "100%",
-    height: '80%',
+    height: '70%',
     backgroundColor: '#212121',
   },
   Datadescription:{
     flexDirection: 'row',
-    backgroundColor: "#353535",
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: size * 5.5,
     paddingLeft: size * 10,
     paddingRight: size * 10,
-    width: '100%',
-    height: '14.2857%',
-    borderBottomWidth: 0.2,
-    borderBottomColor: '#e3e3e3',
+    flex: 1,
     textAlign: 'center',
+    borderBottomWidth: 0.3,
+    borderBottomColor: "#e3e3e3",
     // marginTop: 50,
     // marginBottom: 50,
   },
+  DatadescriptionEnd:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: size * 5.5,
+    paddingLeft: size * 10,
+    paddingRight: size * 10,
+    flex: 1,
+    textAlign: 'center',
+    
+  },
   Nav:{
-    backgroundColor: '#353535',
+    backgroundColor: '#212121',
     alignItems: 'center',
     justifyContent: 'space-around',
-    height: '20%',
+    height: '30%',
     width: '100%',
     flexDirection: 'row',
   },
   Navbtn:{
     width: '60%',
-    height: '50%',
-  },
-  Navlist:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 0.5,
+    height: '30%',
   },
   image: {
     width: 45,
     height: 45,
-  },
-  Navempty: {
-    backgroundColor: '#ffffff',
-    flex: 0.1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   DataTitle: {
     fontSize: size*4.5, 
@@ -171,7 +177,6 @@ const styles = StyleSheet.create({
   },
   StatusDescription:{
     flexDirection: 'row',
-    backgroundColor: "#353535",
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: size * 5.5,
@@ -179,12 +184,23 @@ const styles = StyleSheet.create({
     paddingRight: size * 10,
     width: '100%',
     height: '14.2857%',
-    borderBottomWidth: 2,
-    borderBottomColor: '#e3e3e3',
     textAlign: 'center',
     // marginTop: 50,
     // marginBottom: 50,
   },
+  BatteryInfo:{
+    borderRadius: 10,
+    backgroundColor: "#353535",
+    marginLeft: size * 3,
+    marginRight: size * 3,
+  },
+  BatteryData:{
+    borderRadius: 10,
+    backgroundColor: "#353535",
+    marginTop: size * 2,
+    marginLeft: size * 3,
+    marginRight: size * 3,
+  }
 });
 
 export default Description;

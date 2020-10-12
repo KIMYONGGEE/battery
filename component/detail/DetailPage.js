@@ -72,7 +72,7 @@ export default function DetailPage({navigation, route}) {
       .catch((error) => {
         // Failure code
         console.log(error);
-      }); 
+      });
     };
   });
 
@@ -115,9 +115,9 @@ export default function DetailPage({navigation, route}) {
             }).catch((error) =>{
               console.log("notification error = ", error);
             });
-          }, 200);
+          }, 100);
         });
-      }, 900);
+      }, 100);
 
     });
   }
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "40%",
     // flex: size/6,
-    backgroundColor: '#353535',
+    backgroundColor: '#212121',
   },
   Bott: {
     width: "100%",
