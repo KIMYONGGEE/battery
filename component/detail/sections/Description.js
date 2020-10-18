@@ -44,6 +44,7 @@ function Description({ navigation, Battery, Data}) {
 
     // Level 1 ERROR(PF) : 
     if(PF!=0){
+      SetColor("#FF3322");
       if(PF==1) status = "PF STATUS VALUE";
       else if(PF==2) status = "C.F";
       else if(PF==3) status = "L.V";
@@ -107,8 +108,6 @@ function Description({ navigation, Battery, Data}) {
         </View>
 
       </View>
-
-      
     </>
   );
 }
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
     paddingRight: size * 10,
     flex: 1,
     textAlign: 'center',
-    borderBottomWidth: 0.3,
+    borderBottomWidth: 0.4,
     borderBottomColor: "#e3e3e3",
     // marginTop: 50,
     // marginBottom: 50,
@@ -142,7 +141,6 @@ const styles = StyleSheet.create({
     paddingRight: size * 10,
     flex: 1,
     textAlign: 'center',
-    
   },
   Nav:{
     backgroundColor: '#212121',

@@ -13,7 +13,10 @@ const window = Dimensions.get('window');
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
+
+
 export default function ListPage({navigation, route}){
+
   const [scanning, setScanning] = useState(false);
   const [connecting, setConnecting] = useState(false);
 
@@ -34,15 +37,32 @@ export default function ListPage({navigation, route}){
   const [listCnt, setListCnt] = useState(0);
   const list = Array.from(new Set(updatePeripherals.values()));
 
-  BleManager.start({showAlert: false});
-
   useEffect(() =>{
+    console.log("이벤트 리스너 이펙트 실행");
+
+    BleManager.start({showAlert: false});
+    console.log("첫번째 시작"); 
+    
     AppState.addEventListener('change', handleAppStateChange);
     
     const handlerConnect = bleManagerEmitter.addListener('BleManagerConnectPeripheral', handleConnectedPeripheral );
     const handlerDiscover = bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral );
     const handlerStop = bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan );
     const handlerDisconnect = bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', handleDisconnectedPeripheral );
+
+    return () => {
+      console.log("이벤트 리스너 이펙트 종료");
+      handlerConnect.remove();
+      handlerDiscover.remove();
+      handlerStop.remove();
+      handlerDisconnect.remove();
+      // console.log("return function");
+    };
+
+  }, []);
+
+  useEffect(() =>{
+    // console.log("st/art hooks");
     
     if (Platform.OS === 'android' && Platform.Version >= 23) {
         PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION).then((result) => {
@@ -59,6 +79,7 @@ export default function ListPage({navigation, route}){
             }
       });
     }
+
     BleManager.enableBluetooth() //Bluetooth를 자동으로 활성화할 수 있게 허용 유무을 묻는다.
     .then(() => {
       if(scanning == false && connecting == false){
@@ -71,12 +92,13 @@ export default function ListPage({navigation, route}){
     });
 
 
-    return () => {
-      handlerConnect.remove();
-      handlerDiscover.remove();
-      handlerStop.remove();
-      handlerDisconnect.remove();
-    };
+    // return () => {
+    //   handlerConnect.remove();
+    //   handlerDiscover.remove();
+    //   handlerStop.remove();
+    //   handlerDisconnect.remove();
+    //   // console.log("return function");
+    // };
   }, [scanning, connecting, listCnt]);
 
   const handleAppStateChange = (nextAppState)  => {
@@ -114,12 +136,12 @@ export default function ListPage({navigation, route}){
 
   const startScan = () => {
     console.log("Scanning start");
-    async function A(){
-      await BleManager.scan([], 10, true).then((results) => { //7초이상 권장사항
+    // async function A(){
+      BleManager.scan([], 10, true).then((results) => { //7초이상 권장사항
         
       });
-    }
-    A();
+    // }
+    // A();
     setScanning(true);
   }
 
@@ -233,7 +255,7 @@ export default function ListPage({navigation, route}){
   return (
     <>
     <StatusBar backgroundColor={'#212121'} color={'#ffffff'} barStyle="night-content"/> 
-    <SafeAreaView>      
+    <SafeAreaView>
         <ScrollView
           style={styles.scroll}
           refreshControl={

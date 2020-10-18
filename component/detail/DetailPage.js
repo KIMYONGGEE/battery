@@ -18,10 +18,8 @@ var stateimage ='';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-
 export default function DetailPage({navigation, route}) {
   
-
   const [data, setData] = useState(new Array());
 
   //var imgpath ='';
@@ -29,6 +27,39 @@ export default function DetailPage({navigation, route}) {
   var batteryId = route.params.Battery[3];
   var batteryServiceUUIDs = route.params.Battery[4];
   //if(chargestatus == 0) imgpath = '../../assets/main/detailcharging.png';
+
+  useEffect(() => {
+    console.log("디테일페이지 첫 시작");
+
+    // BleManager.stopScan();
+
+    const handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );
+
+    BleManager.connect(batteryId)
+    .then(() => {
+      // Success code
+      retrieveConnected();
+    })
+    .catch((error) => {
+      // Failure code
+      console.log("connection error! = ", error);
+    });
+
+    return () =>{
+      handlerUpdate.remove();  
+      BleManager.disconnect(batteryId)
+      .then(() => {
+        // Success code
+        // console.log("Disconnected");
+      })
+      .catch((error) => {
+        // Failure code
+        console.log("Disconnected error", error);
+      });
+
+      console.log("디스커넥트, 아무것도 없는 이펙트");
+    };
+  }, []);
 
   useEffect(() => {
     var serialnum = route.params.Battery[0].toString();
@@ -49,30 +80,13 @@ export default function DetailPage({navigation, route}) {
     // }
     //3자리, 4자리도 더 만들기
 
-    const handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );
-
-    BleManager.connect(batteryId)
-    .then(() => {
-      // Success code
-      retrieveConnected();
-    })
-    .catch((error) => {
-      // Failure code
-      console.log(error);
-    });
+    
 
     //끝날때 disconnect
     return () => {
-      handlerUpdate.remove();  
-      BleManager.disconnect(batteryId)
-      .then(() => {
-        // Success code
-        // console.log("Disconnected");
-      })
-      .catch((error) => {
-        // Failure code
-        console.log(error);
-      });
+      console.log("디스커넥트 시도");
+      
+      
     };
   });
 
@@ -115,9 +129,9 @@ export default function DetailPage({navigation, route}) {
             }).catch((error) =>{
               console.log("notification error = ", error);
             });
-          }, 100);
+          }, 200);
         });
-      }, 100);
+      }, 500);
 
     });
   }
@@ -159,6 +173,7 @@ const styles = StyleSheet.create({
   Bott: {
     width: "100%",
     height: "60%",
+    backgroundColor: '#212121',
     // flex: size/4,
   },
   image: {
