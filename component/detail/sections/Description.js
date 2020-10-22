@@ -54,7 +54,7 @@ function Description({ navigation, Battery, Data}) {
     if(SG == 0 && PF == 0){
       status = "O.K";
     }
-  });
+  }, []);
 
   return (
     <>

@@ -7,7 +7,7 @@ import {stringToBytes, bytesToString} from "convert-string";
 import Chart from './sections/donut';
 import DesCription from './sections/Description';
 
-const notidata = stringToBytes("123");
+const notidata = stringToBytes("1\r\n");
 
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
@@ -29,7 +29,22 @@ export default function DetailPage({navigation, route}) {
   //if(chargestatus == 0) imgpath = '../../assets/main/detailcharging.png';
 
   useEffect(() => {
+    // BleManager.stopScan().then(() => {
+    //   // Success code
+    //   console.log("Scan stopped");
+    // });
+    
     console.log("디테일페이지 첫 시작");
+
+    console.log(route.params.Battery);
+
+    var serialnum = route.params.Battery[0].toString();
+    var titled = "S/N : ";
+
+    for(var i = 0; i < 8-serialnum.length; i++) titled += "0";
+
+    titled += serialnum;
+    navigation.setOptions({ title: titled });
 
     // BleManager.stopScan();
 
@@ -50,7 +65,7 @@ export default function DetailPage({navigation, route}) {
       BleManager.disconnect(batteryId)
       .then(() => {
         // Success code
-        // console.log("Disconnected");
+        console.log("Disconnected");
       })
       .catch((error) => {
         // Failure code
@@ -62,43 +77,24 @@ export default function DetailPage({navigation, route}) {
   }, []);
 
   useEffect(() => {
-    var serialnum = route.params.Battery[0].toString();
-    // var serialnum = "12345";
-    console.log(typeof(serialnum), serialnum);
-    var titled = "S/N : ";
-
-    for(var i = 0; i < 8-serialnum.length; i++) titled += "0";
-
-    titled += serialnum;
-    navigation.setOptions({ title: titled });
-
-    // if(route.params.Battery[0]<10){
-    //   navigation.setOptions({ title: titled });
-    // }
-    // else{
-    //   navigation.setOptions({ title: titled });
-    // }
-    //3자리, 4자리도 더 만들기
-
-    
 
     //끝날때 disconnect
     return () => {
       console.log("디스커넥트 시도");
-      
-      
     };
-  });
+  }, [data]);
 
   const retrieveConnected= () => {
     var notichar;
     var serviceUUID = batteryServiceUUIDs[0];
     var writechar;
 
-    BleManager.getConnectedPeripherals(batteryServiceUUIDs).then((results) => {
+    BleManager.getConnectedPeripherals([]).then((results) => {
       if (results.length == 0) {
         console.log('No connected peripherals');
       }
+
+      console.log("result = ", results);
 
       setTimeout(() =>{
         BleManager.retrieveServices(batteryId).then((peripheralInfo) => {
@@ -113,9 +109,6 @@ export default function DetailPage({navigation, route}) {
               }
             }
           }
-
-          // notichar = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
-          // writechar = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 
           setTimeout(() =>{
             BleManager.startNotification(batteryId, serviceUUID, notichar).then(() =>{
