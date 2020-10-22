@@ -5,11 +5,10 @@ import { StatusBar } from 'expo-status-bar';
 var size = Dimensions.get('window').width/100;
 // var statuscolor = '#088A29';
 
-function Description({ navigation, Battery, Data}) {
+function Description({ navigation, Battery, Chargestatus, Data}) {
 
   const [statuscolor, SetColor] = useState('#00FF73');
-
-  var voltage = (Data[2] + (Data[3]*256))/1000; // 단위 v
+  var voltage = ((Data[2] + (Data[3]*256))/1000) ; // 단위 v
   var cyclecount = Data[4] + (Data[5]*256); // 회 
   var ttf = Data[6] + (Data[7]*256); // 분 
   var tte = Data[8] + (Data[9]*256); // 분 
@@ -24,6 +23,9 @@ function Description({ navigation, Battery, Data}) {
   var LEV1ERROR ="";
   var status="O.K";
   console.log("충전" + SG);
+
+  var Time ="";
+  var ttstring="";
 
   useEffect(()=> {
     if(status =="O.K") SetColor('#00FF73');
@@ -54,37 +56,38 @@ function Description({ navigation, Battery, Data}) {
     if(SG == 0 && PF == 0){
       status = "O.K";
     }
-  }, []);
+  });
 
+  if (Chargestatus==1){
+    Time="Time to Full";
+    ttstring=ttf;
+  }
+  if(Chargestatus==0){
+    Time="Time to Empty";
+    ttstring=tte;
+  }
   return (
     <>
       <View style={styles.Data}>
 
-        <View style={styles.BatteryInfo}>
-          <View style={styles.Datadescription}>
-            <Text style={styles.DataTitle}>VOLTAGE</Text>
-            <Text style={styles.DataContents}>{voltage} V</Text>
+        <View style={styles.voltempInfo}>
+          <View style={styles.Datadescriptionvoltmp}>
+            <Text style={styles.voltemp}>{voltage.toFixed(1)}V</Text>
+            <Text style={styles.voltemp}>{temperature.toFixed(0)}°C</Text>
           </View>
+        </View>
+
+         <View style={styles.BatteryInfo}>
           <View style={styles.Datadescription}>
             <Text style={styles.DataTitle}>CYCLE COUNT</Text>
             <Text style={styles.DataContents}>{cyclecount} Cycle</Text>
           </View>
           <View style={styles.DatadescriptionEnd}>
-            <Text style={styles.DataTitle}>TEMP</Text>
-            <Text style={styles.DataContents}>{temperature} °C</Text>
+            <Text style={styles.DataTitle}>{Time}</Text>
+            <Text style={styles.DataContents}>{ttstring} min</Text>
           </View>
         </View>
-
-        <View style={styles.BatteryData}>
-          <View style={styles.Datadescription}>
-            <Text style={styles.DataTitle}>Time to Full</Text>
-            <Text style={styles.DataContents}>{ttf} min</Text>
-          </View>
-          <View style={styles.DatadescriptionEnd}>
-            <Text style={styles.DataTitle}>Time to Empty</Text>
-            <Text style={styles.DataContents}>{tte} min</Text>
-          </View>
-        </View>
+        
 
         <View style={styles.BatteryData}>
           <View style={styles.Datadescription}>
@@ -100,7 +103,7 @@ function Description({ navigation, Battery, Data}) {
         <View style={styles.Nav}>
           <View style={styles.Navbtn}>
             <Button
-              color="#DF7401"
+              color="#A4A4A4"
               title="C h e c k"
               onPress={()=>Alert.alert('Send Data to Battery')}
             />
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
   Data:{
     width: "100%",
     height: '70%',
-    backgroundColor: '#212121',
+    backgroundColor: '#ffffff',
   },
   Datadescription:{
     flexDirection: 'row',
@@ -127,8 +130,8 @@ const styles = StyleSheet.create({
     paddingRight: size * 10,
     flex: 1,
     textAlign: 'center',
-    borderBottomWidth: 0.4,
-    borderBottomColor: "#e3e3e3",
+    borderBottomWidth: 0.9,
+    borderBottomColor: "#ffffff",
     // marginTop: 50,
     // marginBottom: 50,
   },
@@ -142,8 +145,18 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
   },
+    Datadescriptionvoltmp:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: size * 7.5,
+    paddingLeft: size * 15,
+    paddingRight: size * 15,
+    flex: 1,
+    textAlign: 'center',
+  },
   Nav:{
-    backgroundColor: '#212121',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'space-around',
     height: '30%',
@@ -153,20 +166,25 @@ const styles = StyleSheet.create({
   Navbtn:{
     width: '60%',
     height: '30%',
+    borderRadius: 9
   },
   image: {
     width: 45,
     height: 45,
   },
+  voltemp: {
+    fontSize: size*6.5, 
+    fontWeight: 'bold',
+    color:'#585858',
+  },
   DataTitle: {
     fontSize: size*4.5, 
     fontWeight: 'bold',
-    color:'#ffffff',
+    color:'#353535',
   },
   DataContents: {
     fontSize: size*4.5, 
-    fontWeight: 'bold',
-    color:'#e3e3e3',
+    color:'#353535',
   },
   DataStatus:{
     fontSize: size*4.5, 
@@ -186,15 +204,22 @@ const styles = StyleSheet.create({
     // marginTop: 50,
     // marginBottom: 50,
   },
+   voltempInfo:{
+    borderRadius: 10,
+    backgroundColor: "#ffffff",
+    marginLeft: size * 3,
+    marginRight: size * 3,
+  },
   BatteryInfo:{
     borderRadius: 10,
-    backgroundColor: "#353535",
+    backgroundColor: "#F2F2F2",
+    marginTop: size * 2,
     marginLeft: size * 3,
     marginRight: size * 3,
   },
   BatteryData:{
     borderRadius: 10,
-    backgroundColor: "#353535",
+    backgroundColor: "#F2F2F2",
     marginTop: size * 2,
     marginLeft: size * 3,
     marginRight: size * 3,

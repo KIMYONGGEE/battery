@@ -19,10 +19,12 @@ export default function App() {
           options={{
             title: 'NEO SEMITECH',
             headerStyle: {
-              backgroundColor: '#353535',
+              
+              backgroundColor: '#ffffff',
             },
-            headerTintColor: '#ffffff',
+            headerTintColor: '#AE5D0C',
             headerTitleStyle: {
+              alignSelf: 'center',
               fontWeight: 'bold',
             },
           }}
@@ -33,9 +35,9 @@ export default function App() {
           options={{
             title: '세부사항',
             headerStyle: {
-              backgroundColor: '#DF7401',
+              backgroundColor: '#ffffff',
             },
-            headerTintColor: '#ffffff',
+            headerTintColor: '#585858',
             headerTitleStyle: {
               fontWeight: 'bold',
             },

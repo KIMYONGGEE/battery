@@ -29,22 +29,7 @@ export default function DetailPage({navigation, route}) {
   //if(chargestatus == 0) imgpath = '../../assets/main/detailcharging.png';
 
   useEffect(() => {
-    // BleManager.stopScan().then(() => {
-    //   // Success code
-    //   console.log("Scan stopped");
-    // });
-    
     console.log("디테일페이지 첫 시작");
-
-    console.log(route.params.Battery);
-
-    var serialnum = route.params.Battery[0].toString();
-    var titled = "S/N : ";
-
-    for(var i = 0; i < 8-serialnum.length; i++) titled += "0";
-
-    titled += serialnum;
-    navigation.setOptions({ title: titled });
 
     // BleManager.stopScan();
 
@@ -65,7 +50,7 @@ export default function DetailPage({navigation, route}) {
       BleManager.disconnect(batteryId)
       .then(() => {
         // Success code
-        console.log("Disconnected");
+        // console.log("Disconnected");
       })
       .catch((error) => {
         // Failure code
@@ -77,24 +62,43 @@ export default function DetailPage({navigation, route}) {
   }, []);
 
   useEffect(() => {
+    var serialnum = route.params.Battery[0].toString();
+    // var serialnum = "12345";
+    console.log(typeof(serialnum), serialnum);
+    var titled = "S/N : ";
+
+    for(var i = 0; i < 8-serialnum.length; i++) titled += "0";
+
+    titled += serialnum;
+    navigation.setOptions({ title: titled });
+
+    // if(route.params.Battery[0]<10){
+    //   navigation.setOptions({ title: titled });
+    // }
+    // else{
+    //   navigation.setOptions({ title: titled });
+    // }
+    //3자리, 4자리도 더 만들기
+
+    
 
     //끝날때 disconnect
     return () => {
       console.log("디스커넥트 시도");
+      
+      
     };
-  }, [data]);
+  });
 
   const retrieveConnected= () => {
     var notichar;
     var serviceUUID = batteryServiceUUIDs[0];
     var writechar;
 
-    BleManager.getConnectedPeripherals([]).then((results) => {
+    BleManager.getConnectedPeripherals(batteryServiceUUIDs).then((results) => {
       if (results.length == 0) {
         console.log('No connected peripherals');
       }
-
-      console.log("result = ", results);
 
       setTimeout(() =>{
         BleManager.retrieveServices(batteryId).then((peripheralInfo) => {
@@ -109,6 +113,9 @@ export default function DetailPage({navigation, route}) {
               }
             }
           }
+
+          // notichar = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+          // writechar = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 
           setTimeout(() =>{
             BleManager.startNotification(batteryId, serviceUUID, notichar).then(() =>{
@@ -141,7 +148,7 @@ export default function DetailPage({navigation, route}) {
           <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} Data={data}></Chart>
         </View>
         <View style={styles.Bott}>
-          <DesCription navigation={navigation} Battery={route.params.Battery} Data={data}/>
+          <DesCription navigation={navigation} Battery={route.params.Battery} Chargestatus={chargestatus} Data={data}/>
         </View>
       </View>
       
@@ -159,14 +166,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: "100%",
-    height: "40%",
+    height: "53%",
     // flex: size/6,
-    backgroundColor: '#212121',
+    backgroundColor: '#ffffff',
   },
   Bott: {
     width: "100%",
-    height: "60%",
-    backgroundColor: '#212121',
+    height: "50%",
+    backgroundColor: '#ffffff',
     // flex: size/4,
   },
   image: {

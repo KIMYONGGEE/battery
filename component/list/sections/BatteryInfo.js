@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, TouchableOpacity, Dimensions} from 'react-native
 
 import ChargingBar from './ChargingBar';
 
+var size = Dimensions.get('window').width/100;
 export default function BatteryInfo({Battery, navigation}){
 
 const [fillingamount, SetFillingmount] = useState();
@@ -69,7 +70,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderBottomWidth: 1,
-    backgroundColor: '#353535',
+    backgroundColor: '#E2E4E2',
+    marginTop: size * 2,
+    marginLeft: size * 3,
+    marginRight: size * 3,
+    borderBottomWidth: 0.9,
+    borderBottomColor: "#E2E4E2",
+    borderRadius: 10
   },
   ListView: {
     textAlign: 'center',
@@ -86,6 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: Dimensions.get('window').width/100 * 4.5,
     height: Dimensions.get('window').height/9,
-    color: '#ffffff',
+    color: '#353535',
+    fontWeight: 'bold',
   },
 });
