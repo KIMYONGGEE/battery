@@ -12,7 +12,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
   var cyclecount = Data[4] + (Data[5]*256); // 회 
   var ttf = Data[6] + (Data[7]*256); // 분 
   var tte = Data[8] + (Data[9]*256); // 분 
-  var temperature = (Data[10] + (Data[11]*256))/10 + 273.15;  // 셀시어스   
+  var temperature = (Data[10] + (Data[11]*256))/10 - 273.15;  // 셀시어스   
   var soh = Data[12]; // %? hex? Ten?
   var SG = Data[13];
   var PF = Data[14];
@@ -28,7 +28,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
   var ttstring="";
 
   useEffect(()=> {
-    if(status =="O.K") SetColor('#00FF73');
+    if(status =="O.K") SetColor('#57B75D');
 
     //Level 2 ERROR(SG) :
     if(SG!=0){ 
@@ -47,10 +47,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
     // Level 1 ERROR(PF) : 
     if(PF!=0){
       SetColor("#FF3322");
-      if(PF==1) status = "PF STATUS VALUE";
-      else if(PF==2) status = "C.F";
-      else if(PF==3) status = "L.V";
-      else status = "Level 1 error";
+      status = "FAULT(PF" + PF + ")";
     }
 
     if(SG == 0 && PF == 0){

@@ -32,10 +32,10 @@ useEffect(()=> {
   if(SG==0 && PF==0) {
       if(Chargestatus == 1) {
         //setImagepath(require('../../../assets/main/c0.png'));
-        var chargestate = "Charging!";
+        var chargestate = "    Charging...";
       }
   }
-  if(SG!=0 || PF!=0) var chargestate = "ERROR!";
+  if(SG!=0 || PF!=0) var chargestate = "    ERROR!";
   //setImagepath(require('../../../assets/main/e100.png'));
 console.log(Chargestatus);
 

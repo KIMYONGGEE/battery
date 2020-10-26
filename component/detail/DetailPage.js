@@ -18,6 +18,9 @@ var stateimage ='';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
+var notichar;
+var serviceUUID;
+
 export default function DetailPage({navigation, route}) {
   
   const [data, setData] = useState(new Array());
@@ -46,6 +49,7 @@ export default function DetailPage({navigation, route}) {
     });
 
     return () =>{
+      BleManager.stopNotification(batteryId, serviceUUID, notichar);
       handlerUpdate.remove();  
       BleManager.disconnect(batteryId)
       .then(() => {
@@ -91,11 +95,11 @@ export default function DetailPage({navigation, route}) {
   });
 
   const retrieveConnected= () => {
-    var notichar;
-    var serviceUUID = batteryServiceUUIDs[0];
+    
+    serviceUUID = batteryServiceUUIDs[0];
     var writechar;
 
-    BleManager.getConnectedPeripherals(batteryServiceUUIDs).then((results) => {
+    BleManager.getConnectedPeripherals([]).then((results) => {
       if (results.length == 0) {
         console.log('No connected peripherals');
       }
