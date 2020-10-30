@@ -33,7 +33,7 @@ export default function DetailPage({navigation, route}) {
   var batteryServiceUUIDs = route.params.Battery[4];
 
   useEffect(()=>{
-    if(time != 5){
+    if(time != 8){
       setTimeout(()=>{
         var sum = time+1;
         setTime(sum)
@@ -42,9 +42,9 @@ export default function DetailPage({navigation, route}) {
     if(data.length != 0){
       setSpin(false)
       setShow(true)
-      setTime(5)
+      setTime(8)
     }
-    if(data.length == 0 && time ==5){
+    if(data.length == 0 && time ==8){
       Alert.alert('Connection Error', 'Please proceed with the connection again',[{text : 'Back', onPress: () => navigation.navigate('List')}])
     }
   }, [data, time])
