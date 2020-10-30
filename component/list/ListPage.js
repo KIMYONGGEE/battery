@@ -171,7 +171,6 @@ export default function ListPage({navigation, route}){
       }
     }
 
-
     if(checkShit === 7){    //NEOSEMI를 찾았을때 실행하는 부분
       scanperipherals.add(peripheral.id);
       setPeripherals(new Map(peripherals.set(peripheral.id, peripheral)));

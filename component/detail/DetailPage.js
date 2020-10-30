@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import { NativeEventEmitter, NativeModules, StyleSheet, View, Dimensions, Image, Text } from 'react-native';
+import { NativeEventEmitter, NativeModules, StyleSheet, View, Dimensions, Image, Text, Alert } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import {stringToBytes, bytesToString} from "convert-string";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 //Page
 import Chart from './sections/donut';
@@ -22,15 +23,31 @@ var notichar;
 var serviceUUID;
 
 export default function DetailPage({navigation, route}) {
-  
   const [data, setData] = useState(new Array());
+  const [spin, setSpin] = useState(true)
+  const [show, setShow] = useState(false)
+  const [time, setTime] = useState(0)
 
-  //var imgpath ='';
   var chargestatus = route.params.Battery[2];
   var batteryId = route.params.Battery[3];
   var batteryServiceUUIDs = route.params.Battery[4];
-  //if(chargestatus == 0) imgpath = '../../assets/main/detailcharging.png';
 
+  useEffect(()=>{
+    if(time != 5){
+      setTimeout(()=>{
+        var sum = time+1;
+        setTime(sum)
+      },1000)
+    }
+    if(data.length != 0){
+      setSpin(false)
+      setShow(true)
+      setTime(5)
+    }
+    if(data.length == 0 && time ==5){
+      Alert.alert('Connection Error', 'Please proceed with the connection again',[{text : 'Back', onPress: () => navigation.navigate('List')}])
+    }
+  }, [data, time])
   useEffect(() => {
     console.log("디테일페이지 첫 시작");
 
@@ -59,6 +76,7 @@ export default function DetailPage({navigation, route}) {
       .catch((error) => {
         // Failure code
         console.log("Disconnected error", error);
+        // data = []
       });
 
       console.log("디스커넥트, 아무것도 없는 이펙트");
@@ -147,15 +165,21 @@ export default function DetailPage({navigation, route}) {
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.Header}>
-          <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} Data={data}></Chart>
-        </View>
+    <Spinner
+          visible={spin}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
+      {show &&
+        <View style={styles.container}>
+          <View style={styles.Header}>
+            <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} Data={data}></Chart>
+          </View>
         <View style={styles.Bott}>
           <DesCription navigation={navigation} Battery={route.params.Battery} Chargestatus={chargestatus} Data={data}/>
         </View>
       </View>
-      
+      }
     </>
   );
 }
