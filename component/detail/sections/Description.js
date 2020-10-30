@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Alert, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Dimensions, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 var size = Dimensions.get('window').width/100;
@@ -28,6 +28,8 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
   var ttstringh="";
   var ttstringm="";
   var ttstring="";
+  var tap=" ";
+
   useEffect(()=> {
     if(status =="O.K") SetColor('#57B75D');
 
@@ -56,6 +58,8 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
     }
   });
 
+  
+
   if (Chargestatus==1){
     Time="Time to Full";
     ttstringh=ttf/60;
@@ -77,8 +81,18 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
 
         <View style={styles.voltempInfo}>
           <View style={styles.Datadescriptionvoltmp}>
-            <Text style={styles.voltemp}>{voltage.toFixed(2)}V</Text>
-            <Text style={styles.voltemp}>{temperature.toFixed(0)}°C</Text>
+            
+            <Text style={styles.voltemp}>
+              <Image style={styles.image}  source = {require('../../../assets/voltage.png')}  />
+              {tap}
+              {voltage.toFixed(2)}V
+            </Text>
+
+            <Text style={styles.voltemp}>
+              <Image style={styles.image} source = {require('../../../assets/temp.png')} />
+              {tap}
+              {temperature.toFixed(0)}°C
+            </Text>
           </View>
         </View>
 
@@ -155,8 +169,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: size * 7.5,
-    paddingLeft: size * 15,
-    paddingRight: size * 15,
+    paddingLeft: size * 10,
+    paddingRight: size * 10,
     flex: 1,
     textAlign: 'center',
   },
@@ -228,6 +242,10 @@ const styles = StyleSheet.create({
     marginTop: size * 2,
     marginLeft: size * 3,
     marginRight: size * 3,
+  },
+  image: {
+    width:size*6,
+    height:size*6,
   }
 });
 
