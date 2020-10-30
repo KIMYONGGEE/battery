@@ -25,8 +25,9 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
   console.log("충전" + SG);
 
   var Time ="";
+  var ttstringh="";
+  var ttstringm="";
   var ttstring="";
-
   useEffect(()=> {
     if(status =="O.K") SetColor('#57B75D');
 
@@ -57,11 +58,18 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
 
   if (Chargestatus==1){
     Time="Time to Full";
-    ttstring=ttf;
+    ttstringh=ttf/60;
+    ttstringm=ttf%60;
+    ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
+    if(ttf>=65000){
+      ttstring='-'
+    }
   }
   if(Chargestatus==0){
     Time="Time to Empty";
-    ttstring=tte;
+    ttstringh=tte/60;
+    ttstringm=tte%60;
+    ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
   }
   return (
     <>
@@ -69,7 +77,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
 
         <View style={styles.voltempInfo}>
           <View style={styles.Datadescriptionvoltmp}>
-            <Text style={styles.voltemp}>{voltage.toFixed(1)}V</Text>
+            <Text style={styles.voltemp}>{voltage.toFixed(2)}V</Text>
             <Text style={styles.voltemp}>{temperature.toFixed(0)}°C</Text>
           </View>
         </View>
@@ -81,7 +89,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
           </View>
           <View style={styles.DatadescriptionEnd}>
             <Text style={styles.DataTitle}>{Time}</Text>
-            <Text style={styles.DataContents}>{ttstring} min</Text>
+            <Text style={styles.DataContents}>{ttstring}</Text>
           </View>
         </View>
         
@@ -156,13 +164,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'space-around',
-    height: '30%',
-    width: '100%',
+    height: size*10,
+    width: size*100,
     flexDirection: 'row',
   },
   Navbtn:{
-    width: '60%',
-    height: '30%',
+    width: size*60,
+    height: size*1,
     borderRadius: 9
   },
   image: {
