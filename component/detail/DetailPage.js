@@ -45,7 +45,7 @@ export default function DetailPage({navigation, route}) {
       setTime(8)
     }
     if(data.length == 0 && time ==8){
-      Alert.alert('Connection Error', 'Please proceed with the connection again',[{text : 'Back', onPress: () => navigation.navigate('List')}])
+      Alert.alert('Connection Error', 'Please restart connection',[{text : 'Back', onPress: () => navigation.navigate('List')}])
     }
   }, [data, time])
   useEffect(() => {
