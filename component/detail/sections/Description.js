@@ -60,7 +60,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
 
   
 
-  if (Chargestatus==1){
+  if (Chargestatus==0){
     Time="Time to Full";
     ttstringh=ttf/60;
     ttstringm=ttf%60;
@@ -69,11 +69,15 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
       ttstring='-'
     }
   }
-  if(Chargestatus==0){
+  if(Chargestatus==1){
     Time="Time to Empty";
     ttstringh=tte/60;
     ttstringm=tte%60;
     ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
+  }
+  if(Chargestatus==2){
+    Time="Time to Empty";
+    ttstring='-';
   }
   return (
     <>
@@ -119,15 +123,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
           </View>
         </View>
 
-        <View style={styles.Nav}>
-          <View style={styles.Navbtn}>
-            <Button
-              color="#A4A4A4"
-              title="C h e c k"
-              onPress={()=>Alert.alert('Send Data to Battery')}
-            />
-          </View>
-        </View>
+        
 
       </View>
     </>
@@ -173,19 +169,6 @@ const styles = StyleSheet.create({
     paddingRight: size * 10,
     flex: 1,
     textAlign: 'center',
-  },
-  Nav:{
-    backgroundColor: '#ffffff',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    height: size*10,
-    width: size*100,
-    flexDirection: 'row',
-  },
-  Navbtn:{
-    width: size*60,
-    height: size*1,
-    borderRadius: 9
   },
   image: {
     width: 45,

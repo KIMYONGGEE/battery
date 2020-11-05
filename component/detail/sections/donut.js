@@ -41,8 +41,8 @@ console.log(Chargestatus);
 
   return (
     <AnimatedCircularProgress
-        size={size*80}
-        width={size*10}
+        size={size*70}
+        width={size*8}
         fill={Charge} 
         rotation={0}
         tintColor={color}

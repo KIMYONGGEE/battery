@@ -7,9 +7,9 @@ function ChargingBar({Battery, Chargestate, Batteryerr}){
 
   useEffect(()=>{
 
-    if(Chargestate==0){
+    if(Chargestate==1){
       //console.log("no charging , code :", Chargestate);
-      if(Batteryerr!=0){
+      if(Batteryerr==1 || Batteryerr==2){
         if(Battery  >= 96 && Battery  <= 100) setImagepath(require('../../../assets/main/e100.png'));
         else if(Battery  >= 91 && Battery  < 96) setImagepath(require('../../../assets/main/e90.png'));
         else if(Battery  >= 81 && Battery  < 91) setImagepath(require('../../../assets/main/e80.png'));
@@ -37,9 +37,9 @@ function ChargingBar({Battery, Chargestate, Batteryerr}){
       }
     }
 
-    else if(Chargestate==1){
+    else if(Chargestate==0){
       //console.log("charging , code :", Chargestate);
-      if(Batteryerr!=0){
+      if(Batteryerr==1 || Batteryerr==2){
         if(Battery  >= 96 && Battery  <= 100) setImagepath(require('../../../assets/main/e100.png'));
         else if(Battery  >= 91 && Battery  < 96) setImagepath(require('../../../assets/main/e90.png'));
         else if(Battery  >= 81 && Battery  < 91) setImagepath(require('../../../assets/main/e80.png'));
