@@ -9,15 +9,18 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
 
   const [statuscolor, SetColor] = useState('#00FF73');
   var voltage = ((Data[2] + (Data[3]*256))/1000) ; // 단위 v
-  var cyclecount = Data[4] + (Data[5]*256); // 회 
-  var ttf = Data[6] + (Data[7]*256); // 분 
-  var tte = Data[8] + (Data[9]*256); // 분 
-  var temperature = (Data[10] + (Data[11]*256))/10 - 273.15;  // 셀시어스   
-  var soh = Data[12]; // %? hex? Ten?
-  var SG = Data[13];
-  var PF = Data[14];
-  var CNR = Data[15];
-  var charging = Data[16];//0 or 1 
+  var soc = Data[4];  //State of Charge 단위 %
+  var cyclecount = Data[6] + (Data[7]*256); // 회 
+  var ttf = Data[8] + (Data[9]*256); // 분 
+  var tte = Data[10] + (Data[11]*256); // 분 
+  var temperature = (Data[12] + (Data[13]*256))/10 - 273.15;  // 셀시어스   
+  var soh = Data[14]; // %? hex? Ten?
+  var SG = Data[15];
+  var SGH = Data[16];
+  var PF = Data[17];
+  var CNR = Data[18];
+  var CELLV = Data[19];
+  var charging = Data[20];//0 or 1 or 2 (charging, discharging, 대기모드)
 
   var LEV2ERROR ="";
   var LEV1ERROR ="";
@@ -44,6 +47,9 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
       else if(SG==6) status = "O.C.D";
       else if(SG==7) status = "O.C.C";
       else if(SG==8) status = "O.T.I";
+      else if(SG==9) status = "ASCDL";
+      else if(SG==10) status = "ASCCL";
+      else if(SG==11) status = "AOLDL";
       else status = "Level 2 Error";
     }
 
@@ -60,7 +66,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
 
   
 
-  if (Chargestatus==0){
+  if (charging==0){
     Time="Time to Full";
     ttstringh=ttf/60;
     ttstringm=ttf%60;
@@ -69,15 +75,20 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
       ttstring='-'
     }
   }
-  if(Chargestatus==1){
+  else if(charging==1){
     Time="Time to Empty";
     ttstringh=tte/60;
     ttstringm=tte%60;
     ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
   }
-  if(Chargestatus==2){
+  else if(charging==2){
     Time="Time to Empty";
     ttstring='-';
+  }
+  else{
+    Time="Else";
+    ttstring="-";
+    console.log("charging = ", charging);
   }
   return (
     <>

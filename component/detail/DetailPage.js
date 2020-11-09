@@ -10,6 +10,8 @@ import DesCription from './sections/Description';
 
 var bytearray = [0x15, 0x0D, 0x0A];
 
+var datatmp;
+
 const notidata = stringToBytes("\x15\r\n");
 
 const window = Dimensions.get("window");
@@ -78,7 +80,9 @@ export default function DetailPage({navigation, route}) {
 
     return () =>{
       BleManager.stopNotification(batteryId, serviceUUID, notichar);
-      handlerUpdate.remove();  
+      if(handlerUpdate){
+        handlerUpdate.remove();  
+      }  
       BleManager.disconnect(batteryId)
       .then(() => {
         // Success code
@@ -180,8 +184,17 @@ export default function DetailPage({navigation, route}) {
   }
 
   const handleUpdateValueForCharacteristic =(data) => {
-    setData(data.value);
-    console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
+    if(data.value.length == 20){
+      console.log("data received = ", data.value);
+      datatmp = data.value;
+    }
+    else if(data.value.length == 3){
+      datatmp.push(data.value[0]);
+      datatmp.push(data.value[1]);
+      datatmp.push(data.value[2]);
+      setData(datatmp);
+      console.log("data tmp = ", datatmp);
+    }
   }
 
   async function connectAndPrepare() {
@@ -197,10 +210,8 @@ export default function DetailPage({navigation, route}) {
         if(peripheralInfo.characteristics[i].service === serviceUUID){
           if(peripheralInfo.characteristics[i].properties.Write === "Write"){
             writechar = peripheralInfo.characteristics[i].characteristic;
-            console.log("noti = ", writechar);
           } else if(peripheralInfo.characteristics[i].properties.Notify === "Notify"){
             notichar = peripheralInfo.characteristics[i].characteristic;
-            console.log("write = ",notichar);
           }
         }
       }

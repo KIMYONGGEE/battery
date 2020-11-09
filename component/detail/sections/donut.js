@@ -9,8 +9,9 @@ const [imgpath, setImagepath] = useState('');
 
 var charging = Charge +"%\n";
 var chargestate = " ";
-var SG = Data[13];
-var PF = Data[14];
+var soc = Data[4];
+var SG = Data[15];
+var PF = Data[16];
 
 var size = Dimensions.get('window').width/100;
 
@@ -30,7 +31,7 @@ useEffect(()=> {
 
 });
   if(SG==0 && PF==0) {
-      if(Chargestatus == 1) {
+      if(Chargestatus == 0) {
         //setImagepath(require('../../../assets/main/c0.png'));
         var chargestate = "    Charging...";
       }
@@ -43,7 +44,7 @@ console.log(Chargestatus);
     <AnimatedCircularProgress
         size={size*70}
         width={size*8}
-        fill={Charge} 
+        fill={soc} 
         rotation={0}
         tintColor={color}
         backgroundColor="#e3e3e3">
