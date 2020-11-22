@@ -5,9 +5,13 @@ import { StatusBar } from 'expo-status-bar';
 var size = Dimensions.get('window').width/100;
 // var statuscolor = '#088A29';
 
-function Description({ navigation, Battery, Chargestatus, Data}) {
+function Description({ navigation, Data}) {
 
   const [statuscolor, SetColor] = useState('#00FF73');
+  const [status, setStatus] = useState('');
+  const [ttstring, setTTString] = useState('');
+  const [timebtr, setTimebtr] = useState('');
+
   var voltage = ((Data[2] + (Data[3]*256))/1000) ; // 단위 v
   var soc = Data[4];  //State of Charge 단위 %
   var cyclecount = Data[6] + (Data[7]*256); // 회 
@@ -22,75 +26,130 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
   var CELLV = Data[19];
   var charging = Data[20];//0 or 1 or 2 (charging, discharging, 대기모드)
 
-  var LEV2ERROR ="";
-  var LEV1ERROR ="";
-  var status="O.K";
+  //테스트용
+  // var ttf = 30;
+  // var tte = 65535;
+  // var charging = 0;
+  // PF = 1;
 
-  var Time ="";
+
   var ttstringh="";
   var ttstringm="";
-  var ttstring="";
   var tap=" ";
 
   useEffect(()=> {
-    console.log("Description Use");
-    if(status =="O.K") SetColor('#57B75D');
 
-    //Level 2 ERROR(SG) :
-    if(SG!=0){ 
-      SetColor("#FFB300");
-      if(SG==1) status = "LOW BAT";
-      else if(SG==2) status = "O.T.D";
-      else if(SG==3) status = "O.T.C";
-      else if(SG==4) status = "U.T.C";
-      else if(SG==5) status = "O.V";
-      else if(SG==6) status = "O.C.D";
-      else if(SG==7) status = "O.C.C";
-      else if(SG==8) status = "O.T.I";
-      else if(SG==9) status = "ASCDL";
-      else if(SG==10) status = "ASCCL";
-      else if(SG==11) status = "AOLDL";
-      else if(SG==12) status = "C.U.V";
-      else status = "Level 2 Error";
-    }
-
-    // Level 1 ERROR(PF) : 
-    if(PF!=0){
-      SetColor("#FF3322");
-      status = "FAULT(PF" + PF + ")";
-    }
-
-    if(SG == 0 && PF == 0){
-      status = "O.K";
-    }
-  });
-
-  if(ttf > 65000 && tte > 65000){
-    Time="Time to Empty";
-    ttstring='-';
-  }
-
-  else{
-    if (charging==0){
-      Time="Time to Full";
+    // 충전, 방전, 대기상태 판단
+    if(charging == 0){  // 충전
+      setTimebtr("Time to Full");
       ttstringh=ttf/60;
       ttstringm=ttf%60;
-      ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
+      setTTString(Math.floor(ttstringh) + 'h ' + ttstringm +'min');
       if(ttf>=65000){
-        ttstring='-'
+        setTTString('-');
       }
     }
-    else if(charging==1){
-      Time="Time to Empty";
+    else if(charging == 1){ // 방전
+      setTimebtr("Time to Empty");
       ttstringh=tte/60;
       ttstringm=tte%60;
-      ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
-      ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
+      setTTString(Math.floor(ttstringh) + 'h ' + ttstringm +'min');
       if(tte>=65000){
-        ttstring='-'
+        setTTString('-');
       }
     }
-  }
+    else if(charging == 2 || (ttf > 65000 && tte > 65000)){ // 대기
+      setTimebtr("Time to Empty");
+      setTTString('-');
+    }
+
+
+    // 오류 레벨 판단
+    if(SG == 0 && PF == 0){   // O.K
+      setStatus("O.K");
+      SetColor('#57B75D');
+    }
+    else if(SG != 0){   // 2급 고장
+      SetColor("#FFB300");
+      if(SG==1) setStatus("LOW BAT");
+      else if(SG==2) setStatus("O.T.D");
+      else if(SG==3) setStatus("O.T.C");
+      else if(SG==4) setStatus("U.T.C");
+      else if(SG==5) setStatus("O.V");
+      else if(SG==6) setStatus("O.C.D");
+      else if(SG==7) setStatus("O.C.C");
+      else if(SG==8) setStatus("O.T.I");
+      else if(SG==9) setStatus("ASCDL");
+      else if(SG==10) setStatus("ASCCL");
+      else if(SG==11) setStatus("AOLDL");
+      else if(SG==12) setStatus("C.U.V");
+      else setStatus("Level 2 Error");
+    }
+    else if(PF != 0){  // 1급 고장
+      SetColor("#FF3322");
+      setStatus("FAULT(PF" + PF + ")");
+    }
+
+    // console.log("Description Use");
+    // if(status =="O.K") SetColor('#57B75D');
+
+    // //Level 2 ERROR(SG) :
+    // if(SG!=0){ 
+    //   SetColor("#FFB300");
+    //   if(SG==1) setStatus("LOW BAT");
+    //   else if(SG==2) setStatus("O.T.D");
+    //   else if(SG==3) setStatus("O.T.C");
+    //   else if(SG==4) setStatus("U.T.C");
+    //   else if(SG==5) setStatus("O.V");
+    //   else if(SG==6) setStatus("O.C.D");
+    //   else if(SG==7) setStatus("O.C.C");
+    //   else if(SG==8) setStatus("O.T.I");
+    //   else if(SG==9) setStatus("ASCDL");
+    //   else if(SG==10) setStatus("ASCCL");
+    //   else if(SG==11) setStatus("AOLDL");
+    //   else if(SG==12) setStatus("C.U.V");
+    //   else setStatus("Level 2 Error");
+    // }
+
+    // // Level 1 ERROR(PF) : 
+    // if(PF!=0){
+    //   SetColor("#FF3322");
+    //   setStatus("FAULT(PF" + PF + ")");
+    // }
+
+    // if(SG == 0 && PF == 0){
+    //   setStatus("O.K");
+    //   SetColor('#57B75D');
+    // }
+
+    // if(ttf > 65000 && tte > 65000){
+    //   Time="Time to Empty";
+    //   setTTString('-');
+    // }
+  
+    // else{
+    //   if (charging==0){
+    //     Time="Time to Full";
+    //     ttstringh=ttf/60;
+    //     ttstringm=ttf%60;
+    //     setTTString(ttstringh.toFixed(0) + 'h ' + ttstringm +'min');
+    //     if(ttf>=65000){
+    //       setTTString('-');
+    //     }
+    //   }
+    //   else if(charging==1){
+    //     Time="Time to Empty";
+    //     ttstringh=tte/60;
+    //     ttstringm=tte%60;
+    //     setTTString(ttstringh.toFixed(0) + 'h ' + ttstringm +'min');
+    //     setTTString(ttstringh.toFixed(0) + 'h ' + ttstringm +'min');
+    //     if(tte>=65000){
+    //       setTTString('-');
+    //     }
+    //   }
+    // }
+
+  });
   
   return (
     <>
@@ -119,7 +178,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
             <Text style={styles.DataContents}>{cyclecount} Cycle</Text>
           </View>
           <View style={styles.DatadescriptionEnd}>
-            <Text style={styles.DataTitle}>{Time}</Text>
+            <Text style={styles.DataTitle}>{timebtr}</Text>
             <Text style={styles.DataContents}>{ttstring}</Text>
           </View>
         </View>

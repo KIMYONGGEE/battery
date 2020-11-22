@@ -156,6 +156,7 @@ export default function DetailPage({navigation, route}) {
   const handleUpdateValueForCharacteristic =(data) => {
     if(data.value.length == 20){
       console.log("data received = ", data.value);
+      // data.value[15] = 2;
       datatmp = data.value;
     }
     else if(data.value.length == 3){
@@ -168,7 +169,7 @@ export default function DetailPage({navigation, route}) {
   }
 
   const sendData=()=>{
-    Alert.alert("Send Data to Battery");
+    // Alert.alert("Send Data to Battery");
     console.log("send Data to btr");
 
     var arr = stringToBytes("\x40\r\n");
@@ -223,11 +224,11 @@ export default function DetailPage({navigation, route}) {
       {show &&
         <View style={styles.container}>
           <View style={styles.Header}>
-            <Chart Charge={route.params.Battery[1]} Chargestatus={chargestatus} Data={data}></Chart>
+            <Chart Charge={data[4]} Chargestatus={data[20]} Data={data}></Chart>
           </View>
 
           <View style={styles.Bott}>
-            <DesCription navigation={navigation} Battery={route.params.Battery} Chargestatus={chargestatus} Data={data}/>
+            <DesCription navigation={navigation} Data={data}/>
           </View>
 
           <View style={styles.Nav}>
