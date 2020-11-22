@@ -38,7 +38,6 @@ useEffect(()=> {
   }
   if(SG!=0 || PF!=0) var chargestate = "    ERROR!";
   //setImagepath(require('../../../assets/main/e100.png'));
-console.log(Chargestatus);
 
   return (
     <AnimatedCircularProgress

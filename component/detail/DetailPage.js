@@ -33,10 +33,36 @@ export default function DetailPage({navigation, route}) {
   const [spin, setSpin] = useState(true);
   const [show, setShow] = useState(false);
   const [time, setTime] = useState(0);
+  const [cnt, setCnt] = useState(0);
 
   var chargestatus = route.params.Battery[2];
   var batteryId = route.params.Battery[3];
   var batteryServiceUUIDs = route.params.Battery[4];
+
+  useEffect(()=>{
+    if(show){
+      setTimeout(()=>{
+
+        BleManager.getConnectedPeripherals([]).then((results) => {
+          if(results.length > 0){
+            BleManager.write(batteryId, serviceUUID, writechar, notidata).then(() =>{
+              console.log("write complete = ", bytearray, notidata);
+              }).catch((error)=>{
+                console.log("write error = ", error);
+              });
+            if(cnt < 1000){
+              setCnt(cnt + 1);
+              console.log("Time = ", cnt);
+            }
+            else{
+              setCnt(0);
+              console.log("Time = ", cnt);
+            }
+          }
+        });
+      }, 10000);
+    }
+  }, [cnt, show]);
 
   useEffect(()=>{
     if(time != 8){
@@ -45,12 +71,12 @@ export default function DetailPage({navigation, route}) {
         setTime(sum);
       },1000);
     }
-    if(data.length != 0){
+    if(data.length == 23){
       setSpin(false);
       setShow(true);
       setTime(8);
     }
-    if(data.length == 0 && time ==8){
+    if(data.length != 23 && time ==8){
       Alert.alert('Connection Error', 'Please restart connection',[{text : 'Back', onPress: () => navigation.navigate('List')}]);
     }
   }, [data, time]);
@@ -127,62 +153,6 @@ export default function DetailPage({navigation, route}) {
     };
   }, []);
 
-  const retrieveConnected= () => {
-    
-    
-    var writechar;
-
-    BleManager.getConnectedPeripherals([]).then((results) => {
-      if (results.length == 0) {
-        console.log('No connected peripherals');
-      }
-
-      setTimeout(() =>{
-        BleManager.retrieveServices(batteryId).then((peripheralInfo) => {
-          console.log("Peripheral info:", peripheralInfo.characteristics);
-
-          for(var i = 0; i < peripheralInfo.characteristics.length; i++){
-            if(peripheralInfo.characteristics[i].service === serviceUUID){
-              if(peripheralInfo.characteristics[i].properties.Write === "Write"){
-                writechar = peripheralInfo.characteristics[i].characteristic;
-              } else if(peripheralInfo.characteristics[i].properties.Notify === "Notify"){
-                notichar = peripheralInfo.characteristics[i].characteristic;
-              }
-            }
-          }
-
-          // notichar = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
-          // writechar = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-
-          BleManager.requestMTU(batteryId, 260)
-          .then((mtu) => {
-            // Success code
-            console.log("MTU size changed to " + mtu + " bytes");
-          })
-          .catch((error) => {
-            // Failure code
-            console.log(error);
-          });
-
-          setTimeout(() =>{
-            BleManager.startNotification(batteryId, serviceUUID, notichar).then(() =>{
-              console.log("start notification");
-
-              BleManager.write(batteryId, serviceUUID, writechar, bytearray).then(() =>{
-                console.log("write complete = ", bytearray, typeof(bytearray));
-              }).catch((error)=>{
-                console.log("write error = ", error);
-              });
-            }).catch((error) =>{
-              console.log("notification error = ", error);
-            });
-          }, 200);
-        });
-      }, 500);
-
-    });
-  }
-
   const handleUpdateValueForCharacteristic =(data) => {
     if(data.value.length == 20){
       console.log("data received = ", data.value);
@@ -195,6 +165,19 @@ export default function DetailPage({navigation, route}) {
       setData(datatmp);
       console.log("data tmp = ", datatmp);
     }
+  }
+
+  const sendData=()=>{
+    Alert.alert("Send Data to Battery");
+    console.log("send Data to btr");
+
+    var arr = stringToBytes("\x40\r\n");
+
+    BleManager.write(batteryId, serviceUUID, writechar, arr).then(() =>{
+      console.log("write complete = ", arr, arr);
+      }).catch((error)=>{
+        console.log("write error = ", error);
+      });
   }
 
   async function connectAndPrepare() {
@@ -252,7 +235,7 @@ export default function DetailPage({navigation, route}) {
               <Button
                 color="#A4A4A4"
                 title="C h e c k"
-                onPress={()=>Alert.alert('Send Data to Battery')}
+                onPress={()=>sendData()}
               />
             </View>
           </View>

@@ -25,7 +25,6 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
   var LEV2ERROR ="";
   var LEV1ERROR ="";
   var status="O.K";
-  console.log("충전" + SG);
 
   var Time ="";
   var ttstringh="";
@@ -34,6 +33,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
   var tap=" ";
 
   useEffect(()=> {
+    console.log("Description Use");
     if(status =="O.K") SetColor('#57B75D');
 
     //Level 2 ERROR(SG) :
@@ -50,6 +50,7 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
       else if(SG==9) status = "ASCDL";
       else if(SG==10) status = "ASCCL";
       else if(SG==11) status = "AOLDL";
+      else if(SG==12) status = "C.U.V";
       else status = "Level 2 Error";
     }
 
@@ -64,32 +65,33 @@ function Description({ navigation, Battery, Chargestatus, Data}) {
     }
   });
 
-  
-
-  if (charging==0){
-    Time="Time to Full";
-    ttstringh=ttf/60;
-    ttstringm=ttf%60;
-    ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
-    if(ttf>=65000){
-      ttstring='-'
-    }
-  }
-  else if(charging==1){
-    Time="Time to Empty";
-    ttstringh=tte/60;
-    ttstringm=tte%60;
-    ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
-  }
-  else if(charging==2){
+  if(ttf > 65000 && tte > 65000){
     Time="Time to Empty";
     ttstring='-';
   }
+
   else{
-    Time="Else";
-    ttstring="-";
-    console.log("charging = ", charging);
+    if (charging==0){
+      Time="Time to Full";
+      ttstringh=ttf/60;
+      ttstringm=ttf%60;
+      ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
+      if(ttf>=65000){
+        ttstring='-'
+      }
+    }
+    else if(charging==1){
+      Time="Time to Empty";
+      ttstringh=tte/60;
+      ttstringm=tte%60;
+      ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
+      ttstring = ttstringh.toFixed(0) + 'h ' + ttstringm +'min'
+      if(tte>=65000){
+        ttstring='-'
+      }
+    }
   }
+  
   return (
     <>
       <View style={styles.Data}>

@@ -80,7 +80,7 @@ export default function ListPage({navigation, route}){
       // Failure code
       console.log("The user refuse to enable bluetooth");
     });
-  }, [scanning, connecting, refreshing]);
+  }, [scanning, connecting]);
 
   const handleAppStateChange = (nextAppState)  => {
     if (appState.match(/inactive|background/) && nextAppState === 'active') {
@@ -119,7 +119,7 @@ export default function ListPage({navigation, route}){
   const startScan = () => {
     console.log("Scanning start");
 
-    BleManager.scan([], 10, true).then((results) => { //7초이상 권장사항
+    BleManager.scan([], 15, true).then((results) => { //7초이상 권장사항
     });
 
     setScanning(true);
