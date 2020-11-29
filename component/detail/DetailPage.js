@@ -28,16 +28,19 @@ var notichar;
 var serviceUUID;
 var writechar;
 
+
 export default function DetailPage({navigation, route}) {
   const [data, setData] = useState(new Array());
   const [spin, setSpin] = useState(true);
   const [show, setShow] = useState(false);
   const [time, setTime] = useState(0);
   const [cnt, setCnt] = useState(0);
+  const [Colors, SetColor] = useState('#A4A4A4');
 
   var chargestatus = route.params.Battery[2];
   var batteryId = route.params.Battery[3];
   var batteryServiceUUIDs = route.params.Battery[4];
+
 
   useEffect(()=>{
     if(show){
@@ -233,10 +236,13 @@ export default function DetailPage({navigation, route}) {
 
           <View style={styles.Nav}>
             <View style={styles.Navbtn}>
-              <Button
-                color="#A4A4A4"
+              <Button 
+                color={Colors}
                 title="C h e c k"
-                onPress={()=>sendData()}
+                onPress={()=>{
+                  sendData(),
+                  SetColor('#0080FF'),
+                  setTimeout(()=>SetColor('#A4A4A4'),3000)}}
               />
             </View>
           </View>
