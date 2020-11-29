@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 var size = Dimensions.get('window').width/100;
 // var statuscolor = '#088A29';
 
+
 function Description({ navigation, Data}) {
 
   const [statuscolor, SetColor] = useState('#00FF73');
