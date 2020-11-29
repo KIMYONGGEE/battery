@@ -69,9 +69,9 @@ function Description({ navigation, Data}) {
       setStatus("O.K");
       SetColor('#57B75D');
     }
-    else if(SG != 0){   // 2급 고장
+    else if(SG != 0){   // 2급 고장 !=0
       SetColor("#FFB300");
-      if(SG==1) setStatus("LOW BAT");
+      if(SG==1) setStatus("LOW BAT");// ==1
       else if(SG==2) setStatus("O.T.D");
       else if(SG==3) setStatus("O.T.C");
       else if(SG==4) setStatus("U.T.C");
@@ -87,7 +87,7 @@ function Description({ navigation, Data}) {
     }
     else if(PF != 0){  // 1급 고장
       SetColor("#FF3322");
-      setStatus("FAULT(PF" + PF + ")");
+      setStatus("FAULT(PF : " + PF + ")");
     }
 
     // console.log("Description Use");
