@@ -189,8 +189,10 @@ export default function DetailPage({navigation, route}) {
 
     // Connect to device
     await BleManager.connect(batteryId);
+
     // Before startNotification you need to call retrieveServices
     await BleManager.retrieveServices(batteryId).then((peripheralInfo) => {
+      console.log("battery id = ", batteryId);
       console.log("Peripheral info:", peripheralInfo.characteristics);
 
       for(var i = 0; i < peripheralInfo.characteristics.length; i++){
@@ -205,6 +207,10 @@ export default function DetailPage({navigation, route}) {
     });
 
     // To enable BleManagerDidUpdateValueForCharacteristic listener
+    console.log("Before notification start");
+    console.log("service uuid = ", serviceUUID);
+    console.log("notiuuid = ", notichar);
+    console.log("write char = ", writechar);
     await BleManager.startNotification(batteryId, serviceUUID, notichar);
     // Add event listener
     handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );

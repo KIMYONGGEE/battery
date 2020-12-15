@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Alert, Dimensions, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, Dimensions, Image, SafeAreaView} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 var size = Dimensions.get('window').width/100;
@@ -154,6 +154,7 @@ function Description({ navigation, Data}) {
   
   return (
     <>
+    <SafeAreaView>
       <View style={styles.Data}>
 
         <View style={styles.voltempInfo}>
@@ -196,9 +197,9 @@ function Description({ navigation, Data}) {
           </View>
         </View>
 
-        
 
       </View>
+    </SafeAreaView>
     </>
   );
 }
@@ -263,8 +264,8 @@ const styles = StyleSheet.create({
   },
   DataStatus:{
     fontSize: size*4.5, 
-    fontWeight: 'bold',
-    // color: statuscolor,
+    fontWeight: 'bold'
+    
   },
   StatusDescription:{
     flexDirection: 'row',
