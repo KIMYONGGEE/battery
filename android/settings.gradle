@@ -1,4 +1,4 @@
-rootProject.name = 'ExpoBeacons'
+rootProject.name = 'expoBeacons'
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

@@ -6,7 +6,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 //Page
 import Chart from './sections/donut';
-import DesCription from './sections/Description';
+import DesCription from './sections/Description_ios';
 
 var bytearray = [0x15, 0x0D, 0x0A];
 
@@ -27,7 +27,7 @@ var handlerUpdate;
 var notichar;
 var serviceUUID;
 var writechar;
-var firstOpen = false;
+
 
 export default function DetailPage({navigation, route}) {
   const [data, setData] = useState(new Array());
@@ -37,18 +37,15 @@ export default function DetailPage({navigation, route}) {
   const [cnt, setCnt] = useState(0);
   const [Colors, SetColor] = useState('#A4A4A4');
 
+  var chargestatus = route.params.Battery[2];
   var batteryId = route.params.Battery[3];
   var batteryServiceUUIDs = route.params.Battery[4];
 
-  // useEffect(()=>{   //3분 뒤 종료
-  //   setTimeout(()=>{
-  //     navigation.navigate('List');
-  //   }, [180000]);
-  // });
 
   useEffect(()=>{
     if(show){
       setTimeout(()=>{
+
         BleManager.getConnectedPeripherals([]).then((results) => {
           if(results.length > 0){
             BleManager.write(batteryId, serviceUUID, writechar, notidata).then(() =>{
@@ -66,37 +63,23 @@ export default function DetailPage({navigation, route}) {
             }
           }
         });
-      }, 5000);
+      }, 10000);
     }
   }, [cnt, show]);
 
   useEffect(()=>{
-    if(time <= 8 && !firstOpen){
+    if(time != 8){
       setTimeout(()=>{
         var sum = time+1;
         setTime(sum);
-        console.log("Here ???");
       },1000);
     }
-    if(data.length == 23 && time <= 8){
-      console.log("This is !!!");
-      if(data[12] == 0 && data[13] == 0){   //온도가 -273도로 표시될때는 에러 처리
-        firstOpen = true;
-        //setTime(8);
-        Alert.alert('Connection Error', 'Please restart connection',[{text : 'Back', onPress: () => navigation.navigate('List')}]);
-        setTime(10);
-      }
-      else{     // 온도 데이터값이 잘 들어왔을때
-        firstOpen = true;
-        console.log("다르게들어왔다.!", time);
-        setSpin(false);
-        setShow(true);
-        setTime(10);
-      }
+    if(data.length == 23){
+      setSpin(false);
+      setShow(true);
+      setTime(8);
     }
     if(data.length != 23 && time ==8){
-      console.log("잘못들어왔을때");
-      firstOpen = true;
       Alert.alert('Connection Error', 'Please restart connection',[{text : 'Back', onPress: () => navigation.navigate('List')}]);
     }
   }, [data, time]);
@@ -173,20 +156,18 @@ export default function DetailPage({navigation, route}) {
     };
   }, []);
 
-  const handleUpdateValueForCharacteristic =(inputdata) => {
-    if(inputdata.value.length == 20){
-      console.log("data received = ", typeof(inputdata.value));
-      // data.value[15] = 1;
-      datatmp = inputdata.value;
+  const handleUpdateValueForCharacteristic =(data) => {
+    if(data.value.length == 21){
+      console.log("data received = ", data.value);
+      data.value.pop();
+      // data.value[15] = 2;
+      datatmp = data.value;
     }
-    else if(inputdata.value.length == 3){
-      datatmp.push(inputdata.value[0]);
-      datatmp.push(inputdata.value[1]);
-      datatmp.push(inputdata.value[2]);
-      datatmp[17] = 16;
-      console.log("cnt = ", cnt);
+    else if(data.value.length == 3){
+      datatmp.push(data.value[0]);
+      datatmp.push(data.value[1]);
+      datatmp.push(data.value[2]);
       setData(datatmp);
-
       console.log("data tmp = ", datatmp);
     }
   }
@@ -209,22 +190,33 @@ export default function DetailPage({navigation, route}) {
 
     // Connect to device
     await BleManager.connect(batteryId);
+
     // Before startNotification you need to call retrieveServices
     await BleManager.retrieveServices(batteryId).then((peripheralInfo) => {
+      console.log("battery id = ", batteryId);
       console.log("Peripheral info:", peripheralInfo.characteristics);
 
       for(var i = 0; i < peripheralInfo.characteristics.length; i++){
         if(peripheralInfo.characteristics[i].service === serviceUUID){
-          if(peripheralInfo.characteristics[i].properties.Write === "Write"){
-            writechar = peripheralInfo.characteristics[i].characteristic;
-          } else if(peripheralInfo.characteristics[i].properties.Notify === "Notify"){
-            notichar = peripheralInfo.characteristics[i].characteristic;
+          for(var j = 0; j < peripheralInfo.characteristics[i].properties.length; j++){
+            if(peripheralInfo.characteristics[i].properties[j] === "Write"){
+              writechar = peripheralInfo.characteristics[i].characteristic;
+            } else if(peripheralInfo.characteristics[i].properties[j] === "Notify"){
+              notichar = peripheralInfo.characteristics[i].characteristic;
+            }
           }
+          // if(peripheralInfo.characteristics[i].properties.Write === "Write"){
+          // } else if(peripheralInfo.characteristics[i].properties.Notify === "Notify"){
+          // }
         }
       }
     });
 
     // To enable BleManagerDidUpdateValueForCharacteristic listener
+    console.log("Before notification start");
+    console.log("service uuid = ", serviceUUID);
+    console.log("notiuuid = ", notichar);
+    console.log("write char = ", writechar);
     await BleManager.startNotification(batteryId, serviceUUID, notichar);
     // Add event listener
     handlerUpdate = bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic );
@@ -256,7 +248,7 @@ export default function DetailPage({navigation, route}) {
 
           <View style={styles.Nav}>
             <View style={styles.Navbtn}>
-              <Button
+              <Button 
                 color={Colors}
                 title="C h e c k"
                 onPress={()=>{
@@ -283,13 +275,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: "100%",
-    height: "43%",
+    height: "45%",
     // flex: size/6,
     backgroundColor: '#ffffff',
   },
   Bott: {
     width: "100%",
-    height: "43%",
+    height: "45%",
     backgroundColor: '#ffffff',
     // flex: size/4,
   },
@@ -297,7 +289,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
-    height: "14%",
+    height: "10%",
     width: "100%",
   },
   Navbtn:{
